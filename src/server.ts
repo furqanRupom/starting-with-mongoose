@@ -10,7 +10,10 @@ We all do necessary things expect main operation in express . It means we can do
 
 const main = async () => {
   try {
-    await mongoose.connect(config.database_url as string)
+    const connect =  await mongoose.connect(config.database_url as string);
+    if(connect){
+      console.log('successfully connected')
+    }
     app.listen(config.port, () => {
       console.log(`This Mongoose App is running on port ${config.port}`)
     })
