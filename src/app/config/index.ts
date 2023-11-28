@@ -1,9 +1,13 @@
-import dotenv from 'dotenv'
+import dotenv from "dotenv"
 import path from 'path'
 
 dotenv.config({ path: path.join(process.cwd(), '.env') })
 
+
 export default {
   database_url: process.env.MONGODB_URI,
-  port: 5000,
+  port: process.env.PORT,
+  bcrypt_salt_rounds:process.env.BCRYPT_SALT_ROUNDS,
+  default_password: process.env.DEFAULT_PASSWORD
 }
+

@@ -1,6 +1,6 @@
+import { Model, Types } from 'mongoose'
 
-
-interface Guardian {
+export interface IGuardian {
   fatherName: string
   fatherOccupation: string
   fatherContactNo: string
@@ -8,22 +8,24 @@ interface Guardian {
   motherOccupation: string
   motherContactNo: string
 }
-interface userName {
+export interface IUserName {
   firstName: string
-  middleName: string
+  middleName?: string
   lastName: string
 }
 
-interface LocalGuardian {
+export interface ILocalGuardian {
   name: string
   occupation: string
   contactNo: string
 }
 
-export interface Student {
-  id:string
-  name: userName
-  gender: 'male' | 'female'
+export interface IStudent {
+  id: string
+  userId:Types.ObjectId
+  password: string
+  name: IUserName
+  gender: 'male' | 'female' | 'others'
   school: string
   email: string
   dateOFBirth: string
@@ -32,8 +34,16 @@ export interface Student {
   bloodGroup?: 'O+' | 'O-' | 'B+' | 'B-' | 'AB+' | 'AB-' | 'A+' | 'A-'
   presentAddress: string
   permanentAddress: string
-  guardian: Guardian
-  localGuardian: LocalGuardian
-  profileImage?:string
-  isActive: "Active" | "inActive"
+  guardian: IGuardian
+  localGuardian: ILocalGuardian
+  profileImage?: string
+  isDeleted: boolean
 }
+
+// statics methods
+
+export interface TStudentModel extends Model<IStudent> {
+  isStudentsExits(id: string): Promise<IStudent | null>
+}
+
+

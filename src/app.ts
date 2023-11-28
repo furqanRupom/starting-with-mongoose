@@ -1,28 +1,36 @@
-import express, { Application, NextFunction, Request, Response } from 'express'
+import express, { Application, Request, Response, NextFunction } from 'express'
 import cors from 'cors'
+import { studentRoutes } from './app/modules/student/student.routes'
+import { userRoutes } from './app/modules/user/user.routes'
+import globalErrorHandler from './app/middleware/globalErrorHandler'
+import notFound from './app/middleware/notFound'
+import router from './app/routes'
 
 const app: Application = express()
 app.use(cors())
 app.use(express.json())
 
+//application  routes
+
+app.use('/api/v1/', router)
+
+
+
+
 app.get('/', (req: Request, res: Response) => {
-  try {
-    console.log(req)
-
-    res.status(200).json({ success: true, message: 'Data Successfully get tt' })
-  } catch (error: any) {
-    console.log(error.message)
-  }
+  res.send('Mongo App is Working!')
 })
 
-// Global Error Handling
 
-app.use((error: any, req: Request, res: Response, next: NextFunction) => {
-  if (error) {
-    res
-      .status(400)
-      .json({ success: false, error: true, message: 'Something went wrong' })
-  }
-})
+
+
+// Global Error middleware
+app.use(globalErrorHandler);
+
+
+// not found
+app.use(notFound);
+
+
 
 export default app
