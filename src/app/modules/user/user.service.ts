@@ -4,7 +4,8 @@ import { StudentModel } from '../student/student.model'
 import { IUser } from './user.interface'
 import { UserModel } from './user.model'
 
-const createStudentIntoDB = async (password: string, studentData: IStudent) => {
+
+const createStudentIntoDB  = async (password: string, studentData: IStudent) => {
   const userData: Partial<IUser> = {}
   userData.password = password || (config.default_password as string)
   userData.role = 'student'
