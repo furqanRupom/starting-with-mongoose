@@ -28,7 +28,7 @@ export interface IStudent {
   gender: 'male' | 'female' | 'others'
   school: string
   email: string
-  dateOFBirth: string
+  dateOFBirth?: Date
   contactNumber: string
   emergencyContactNo: string
   bloodGroup?: 'O+' | 'O-' | 'B+' | 'B-' | 'AB+' | 'AB-' | 'A+' | 'A-'
