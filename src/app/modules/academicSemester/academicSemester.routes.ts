@@ -16,7 +16,7 @@ router.get('/', academicSemesterController.getAllAcademicSemesters)
 router.get('/:id', academicSemesterController.getSpecificAcademicSemester)
 router.patch(
   '/:id',
-  validateRequest(academicSemesterValidation),
+  validateRequest(academicSemesterValidation.partial()),
   academicSemesterController.updateSpecificAcademicSemester,
 )
 

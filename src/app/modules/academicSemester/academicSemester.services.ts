@@ -16,19 +16,23 @@ const getAllAcademicSemestersFromDB = async () => {
 }
 
 const getSpecificAcademicSemesterFromDB = async (id: string) => {
-  const result = await AcademicSemesterModel.findById({ _id: id })
+  const result = await AcademicSemesterModel.findById(id)
   return result
 }
 
 const updateSpecificAcademicSemesterFromDB = async (
   id: string,
-  payload: IAcademicSemester,
+  payload: Partial<IAcademicSemester>,
 ) => {
-  if (semesterNameAndCodeMapper[payload.name] !== payload.code) {
+  if (
+    payload.name &&
+    payload.code &&
+    semesterNameAndCodeMapper[payload.name] !== payload.code
+  ) {
     throw new Error('Invalid semester code !')
   }
   const result = await AcademicSemesterModel.findByIdAndUpdate(
-    { _id: id },
+    { _id : id },
     { $set: payload },
     { new: true, runValidators: true },
   )

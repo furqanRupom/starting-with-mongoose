@@ -8,7 +8,6 @@ import {
 } from './student.interface'
 import validator from 'validator'
 
-
 // refactor schema
 
 const studentNameSchema = new Schema<IUserName>({
@@ -69,7 +68,7 @@ const localGuardianSchema = new Schema<ILocalGuardian>({
 
 const studentSchema = new Schema<IStudent, TStudentModel>(
   {
-    name:studentNameSchema,
+    name: studentNameSchema,
     id: { type: String, required: true, unique: true },
     userId: {
       type: Schema.Types.ObjectId,
@@ -87,7 +86,7 @@ const studentSchema = new Schema<IStudent, TStudentModel>(
     },
     dateOFBirth: {
       type: Date,
-       required:false
+      required: false,
     },
     email: {
       type: String,
@@ -128,7 +127,10 @@ const studentSchema = new Schema<IStudent, TStudentModel>(
       required: [true, 'local guardian details is required !'],
     },
     profileImage: { type: String },
-
+    admissionSemester: {
+      type: Schema.Types.ObjectId,
+      ref:'academicSemesters'
+    },
     isDeleted: {
       type: Boolean,
       default: false,
@@ -142,10 +144,6 @@ const studentSchema = new Schema<IStudent, TStudentModel>(
 )
 
 /*  Mongoose Middleware and Hooks      */
-
-//  pre : Executed before a document is saved
-
-
 
 //  Executes before when a document query is executed!
 
