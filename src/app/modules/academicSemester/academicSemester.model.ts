@@ -1,56 +1,36 @@
 import { Schema, model } from 'mongoose'
-import { IAcademicSemester } from './academicSemester.interface'
+import { IAcademicSemester, TMonths } from './academicSemester.interface'
+import { academicSemesterCode, academicSemesterName, months } from './academicSemester.constant'
+
 
 const AcademicSemesterSchema = new Schema<IAcademicSemester>(
   {
     name: {
       type: String,
       enum: {
-        values: ['autumn', 'summer', 'fall'],
+        values: academicSemesterName,
         message: '{VALUE} is not valid',
       },
+    },
+    year : {
+     type:String,
+     required:true
     },
     code: {
       type: String,
       enum: {
-        values: ['01', '02', '03'],
+        values: academicSemesterCode,
         message: '{VALUE} is not valid',
       },
     },
     startsMonth: {
       type: String,
-      enum: [
-        'january',
-        'february',
-        'march',
-        'april',
-        'may',
-        'june',
-        'july',
-        'august',
-        'september',
-        'october',
-        'november',
-        'december',
-      ],
+      enum: months,
       required: true,
     },
     endMonth: {
       type: String,
-      enum: [
-        'january',
-        'february',
-        'march',
-        'april',
-        'may',
-        'june',
-        'july',
-        'august',
-        'september',
-        'october',
-        'november',
-        'december',
-      ],
+      enum:months,
       required: true,
     },
   },
@@ -58,5 +38,27 @@ const AcademicSemesterSchema = new Schema<IAcademicSemester>(
     timestamps: true,
   },
 )
+
+
+
+
+
+/*
+Pre document  : we were checking that current document is valid or not   */
+
+
+AcademicSemesterSchema.pre('save',async function(next){
+  const isAcademicSemesterExits = await AcademicSemesterModel.findOne({
+    name:this.name,
+    year:this.year
+  })
+
+  if(isAcademicSemesterExits){
+    throw new Error('This semester is already exits !');
+  }
+
+  next();
+
+})
 
 export const AcademicSemesterModel = model<IAcademicSemester>('academicSemester',AcademicSemesterSchema)

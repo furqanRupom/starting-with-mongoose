@@ -10,6 +10,7 @@ import catchAsync from '../../utils/catchAsync'
 const getAllStudentsController = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const result = await StudentServices.getAllStudentsFromDB()
+   
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
