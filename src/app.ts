@@ -11,7 +11,11 @@ app.use(express.json())
 
 //application  routes
 
+
+
 app.use('/api/v1/', router)
+
+
 
 
 
