@@ -1,6 +1,7 @@
 import { Schema, model } from 'mongoose'
 import { IAcademicSemester} from './academicSemester.interface'
 import { academicSemesterCode, academicSemesterName, months } from './academicSemester.constant'
+import AppError from '../../errors/AppError'
 
 
 
@@ -56,7 +57,7 @@ AcademicSemesterSchema.pre('save',async function(next){
   })
 
   if(isAcademicSemesterExits){
-    throw new Error('This semester is already exits !');
+    throw new AppError(400,'This semester is already exits !');
   }
 
   next();

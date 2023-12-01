@@ -18,6 +18,8 @@ const createAcademicDepartment = catchAsync(
   },
 )
 
+
+
 const getAllAcademicDepartment = catchAsync(
   async (req: Request, res: Response) => {
     const result =

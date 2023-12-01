@@ -22,7 +22,7 @@ export interface ILocalGuardian {
 
 export interface IStudent {
   id: string
-  userId:Types.ObjectId
+  user:Types.ObjectId
   password: string
   name: IUserName
   gender: 'male' | 'female' | 'others'
@@ -38,6 +38,7 @@ export interface IStudent {
   localGuardian: ILocalGuardian
   profileImage?: string,
   admissionSemester:Types.ObjectId
+  academicDepartment:Types.ObjectId
   isDeleted: boolean
 }
 

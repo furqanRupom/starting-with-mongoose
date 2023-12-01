@@ -7,10 +7,18 @@ import catchAsync from '../../utils/catchAsync'
 
 // express works => what will be the response and error we will handle and control in this routes also others database operation as well;
 
+
+
+
+
+
+
+
+
 const getAllStudentsController = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const result = await StudentServices.getAllStudentsFromDB()
-   
+
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,

@@ -70,10 +70,10 @@ const studentSchema = new Schema<IStudent, TStudentModel>(
   {
     name: studentNameSchema,
     id: { type: String, required: true },
-    userId: {
+    user: {
       type: Schema.Types.ObjectId,
       required: [true, 'user id is required'],
-      ref: 'User',
+      ref: 'user',
     },
     gender: {
       type: String,
@@ -128,7 +128,11 @@ const studentSchema = new Schema<IStudent, TStudentModel>(
     profileImage: { type: String },
     admissionSemester: {
       type: Schema.Types.ObjectId,
-      ref:'academicSemesters'
+      ref: 'academicSemester',
+    },
+    academicDepartment: {
+      type: Schema.Types.ObjectId,
+      ref:'academicDepartment'
     },
     isDeleted: {
       type: Boolean,

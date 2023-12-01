@@ -16,22 +16,24 @@ const createStudentIntoDB  = async (password: string, payload: IStudent) => {
 
 
   const admissionSemester = await AcademicSemesterModel.findById(payload.admissionSemester)
- console.log(admissionSemester)
 
 
-     if(admissionSemester){
 
-       userData.id = await generateStudentId(admissionSemester)
-      
-     }
+
+       if(admissionSemester){
+         userData.id = await generateStudentId(admissionSemester)
+       }
+
+
 
 
 
   const result = await UserModel.create(userData)
 
+
   if (Object.keys(result).length) {
     payload.id = result.id // embedded id
-    payload.userId = result._id // reference id
+    payload.user= result._id // reference id
 
     const newStudent = await StudentModel.create(payload)
     return newStudent

@@ -4,21 +4,35 @@ import { StudentModel } from './student.model'
 // database works
 
 
-
 const getAllStudentsFromDB = async () => {
   const result = await StudentModel.find()
+    .populate('admissionSemester')
+    .populate({
+      path:'academicDepartment',
+      populate:{
+        path:'academicFaculty'
+      }
+    })
   return result
 }
 
 const getSingleStudentFromDB = async (id: string) => {
-  // const result = await StudentModel.findOne({ id })
-  const result = StudentModel.aggregate([
-    {
-      $match: {
-        id: id,
+  const result = await StudentModel.findOne({ id })
+    .populate('admissionSemester')
+    .populate({
+      path: 'academicDepartment',
+      populate: {
+        path: 'academicFaculty',
       },
-    },
-  ])
+    })
+    
+  // const result = StudentModel.aggregate([
+  //   {
+  //     $match: {
+  //       id: id,
+  //     },
+  //   },
+  // ])
   return result
 }
 
