@@ -20,7 +20,6 @@ export interface IAcademicSemester {
 
 /**
  * Mapping of seasons to codes.
- *
  * 1. autumn : 01
  * 2. summer : 02
  * 3. fall   : 03

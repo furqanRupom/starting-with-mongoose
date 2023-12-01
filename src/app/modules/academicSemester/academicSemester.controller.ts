@@ -4,6 +4,8 @@ import { academicSemesterServices } from './academicSemester.services'
 import sendResponse from '../../utils/sendResponse'
 import httpStatus from 'http-status'
 
+
+
 const createAcademicSemester = catchAsync(
   async (req: Request, res: Response) => {
     const result = await academicSemesterServices.createAcademicSemesterIntoDB(
@@ -64,6 +66,8 @@ const updateSpecificAcademicSemester = catchAsync(
     })
   },
 )
+
+
 
 export const academicSemesterController = {
   createAcademicSemester,
