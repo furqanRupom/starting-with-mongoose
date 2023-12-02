@@ -60,7 +60,74 @@ const createStudentValidationSchema = z.object({
   }),
 })
 
+
+
+// Define Zod schema for guardian
+const guardianUpdateValidationSchema = z.object({
+  fatherName: z.string().min(1).max(255).optional(),
+  fatherOccupation: z.string().min(1).max(255).optional(),
+  fatherContactNo: z.string().min(1).max(255).optional(),
+  motherName: z.string().min(1).max(255).optional(),
+  motherOccupation: z.string().min(1).max(255).optional(),
+  motherContactNo: z.string().min(1).max(255).optional(),
+})
+
+// Define Zod schema for localGuardian
+const localGuardianUpdateValidationSchema = z.object({
+  name: z.string().max(255).optional(),
+  occupation: z.string().max(255).optional(),
+  contactNo: z.string().max(255).optional(),
+})
+
+
+
+
+const studentNameUpdateValidationSchema = z.object({
+  firstName: z
+    .string()
+    .min(1)
+    .max(255)
+    .refine(value => value.charAt(0).toUpperCase() + value.slice(1) === value, {
+      message: 'First name should be in capitalize format',
+    }).optional(),
+  middleName: z.string().max(255).optional(),
+  lastName: z
+    .string()
+    .min(1)
+    .max(255)
+    .refine(value => validator.isAlpha(value), {
+      message: 'Last name is not valid!',
+    }).optional(),
+})
+
+
+const updateStudentValidationSchema = z.object({
+  body: z.object({
+    student: z.object({
+      name: studentNameUpdateValidationSchema.optional(),
+      gender: z.enum(['female', 'male', 'others']).optional(),
+      school: z.string().optional(),
+      dateOFBirth: z.string().optional(),
+      email: z.string().email().optional(),
+      contactNumber: z.string().optional(),
+      emergencyContactNo: z.string().optional(),
+      bloodGroup: z
+        .enum(['A+', 'A-', 'AB+', 'AB-', 'B+', 'B-', 'O+', 'O-'])
+        .optional(),
+      presentAddress: z.string().optional(),
+      permanentAddress: z.string().optional(),
+      guardian: guardianUpdateValidationSchema.optional(),
+      localGuardian: localGuardianUpdateValidationSchema.optional(),
+      admissionSemester: z.string().optional(),
+      academicDepartment: z.string().optional(),
+      profileImage: z.string().optional(),
+    }),
+  }),
+})
+
 export const studentValidations = {
-  studentValidationSchema: createStudentValidationSchema
+  studentValidationSchema: createStudentValidationSchema,
+  updateStudentSchemaValidation : updateStudentValidationSchema
+
 };
 
