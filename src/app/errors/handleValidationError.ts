@@ -1,9 +1,9 @@
 import mongoose from 'mongoose'
-import { IErrorSources } from '../interface/error'
+import { IErrorSources, IGenerateError } from '../interface/error'
 
 export const handleValidationError = (
   error: mongoose.Error.ValidationError,
-) => {
+):IGenerateError => {
   const errorSources: IErrorSources[] = Object.values(error.errors).map(
     (val: mongoose.Error.ValidatorError | mongoose.Error.CastError) => {
       return {
@@ -12,6 +12,8 @@ export const handleValidationError = (
       }
     },
   )
+
+
 
   const statusCode = 400
   return {

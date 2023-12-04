@@ -3,3 +3,13 @@ export interface IErrorSources {
   message: string
 }
 ;[]
+
+
+
+
+export interface IGenerateError {
+  statusCode:number,
+  message:string,
+  errorSources:IErrorSources[],
+  stack?:unknown
+}
