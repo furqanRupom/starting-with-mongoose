@@ -1,6 +1,7 @@
-import app from './app'
-import mongoose from 'mongoose'
-import config from './app/config'
+import app from './app';
+import mongoose from 'mongoose';
+import config from './app/config';
+import { Server } from 'http';
 
 /*
 
@@ -8,20 +9,33 @@ We all do necessary things expect main operation in express . It means we can do
 
 */
 
-
+let server: Server;
 
 const main = async () => {
   try {
-    const connect = await mongoose.connect(config.database_url as string)
+    const connect = await mongoose.connect(config.database_url as string);
     if (connect) {
-      console.log('successfully connected')
+      console.log('successfully connected');
     }
-    app.listen(config.port, () => {
-      console.log(`This Mongoose App is running on port ${config.port}`)
-    })
+    server = app.listen(config.port, () => {
+      console.log(`This Mongoose App is running on port ${config.port}`);
+    });
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
-}
+};
 
-main()
+main();
+
+process.on('unhandledRejection', () => {
+  if (server) {
+    server.close(() => {
+      process.exit(1);
+    });
+  }
+  process.exit(1);
+});
+
+process.on('uncaughtException', () => {
+  process.exit(1);
+});

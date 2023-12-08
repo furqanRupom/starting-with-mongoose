@@ -64,4 +64,7 @@ userSchema.post('save', function (doc, next) {
   next()
 })
 
+
+
+
 export const UserModel = model<IUser>('user',userSchema)

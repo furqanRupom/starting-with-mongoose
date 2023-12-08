@@ -6,6 +6,7 @@ import { IErrorSources } from '../interface/error'
 import { handleValidationError } from '../errors/handleValidationError'
 import { handleCastError } from '../errors/handleCastError'
 import { handleDuplicateError } from '../errors/handleDuplicateError'
+import AppError from '../errors/AppError'
 
 /*
 
@@ -27,6 +28,7 @@ const globalErrorHandler = (
 ) => {
   let statusCode: number = 500
   let message: string = error.message || 'Something went wrong '
+
 
   let errorSources: IErrorSources[] = [
     { path: '', message: '' || 'Something went wrong' },
@@ -57,16 +59,21 @@ const globalErrorHandler = (
     message = simplifiedError.message
     errorSources = simplifiedError.errorSources
   } else if (error?.code === 11000) {
-    
+
     /* Duplicate   Error */
 
-
-
-
     const simplifiedError = handleDuplicateError(error)
+    message = simplifiedError.message;
+    statusCode = simplifiedError.statusCode;
+    errorSources = simplifiedError.errorSources;
 
-    message = simplifiedError.message
-    errorSources = []
+  }else if (error instanceof AppError){
+    statusCode = error?.statusCode;
+    message = error?.message;
+    errorSources = [{
+      path:'',
+      message:error?.message
+    }]
   }
 
   return res

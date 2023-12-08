@@ -1,5 +1,6 @@
-import { IAcademicSemester } from '../academicSemester/academicSemester.interface'
-import { UserModel } from './user.model'
+import { IAcademicSemester } from '../academicSemester/academicSemester.interface';
+import { FacultyModal } from '../faculty/faculty.model';
+import { UserModel } from './user.model';
 
 const lastStudentId = async () => {
   const lastStudent = await UserModel.findOne(
@@ -12,36 +13,66 @@ const lastStudentId = async () => {
     },
   )
     .sort({ createdAt: -1 })
-    .lean()
+    .lean();
   // 202203  => 0001
-  return lastStudent?.id ? lastStudent?.id : undefined
-}
+  return lastStudent?.id ? lastStudent?.id : undefined;
+};
 
 export const generateStudentId = async (payload: IAcademicSemester) => {
   /* 0001                     0000  */
-  let currentId = (0).toString()
+  let currentId = (0).toString();
 
-  const getLastStudentId = await lastStudentId()
+  const getLastStudentId = await lastStudentId();
   // 2022 01 0001
 
-  const lastStudentYear = getLastStudentId?.substring(0,4) // 2022
-  const lastStudentSemesterCode = getLastStudentId?.substring(4, 6) // 01 | 02 | 03
+  const lastStudentYear = getLastStudentId?.substring(0, 4); // 2022
+  const lastStudentSemesterCode = getLastStudentId?.substring(4, 6); // 01 | 02 | 03
 
-  const currentCode = payload.code
-  const currentYear = payload.year
-
+  const currentCode = payload.code;
+  const currentYear = payload.year;
 
   if (
     getLastStudentId &&
     lastStudentSemesterCode === currentCode &&
     lastStudentYear === currentYear
   ) {
-    currentId = getLastStudentId.substring(6)
-
+    currentId = getLastStudentId.substring(6);
   }
 
   /* '000' 1+1 => padStart => '0002'    '000' 0 + 1 => '0001'  */
-  let incrementId = (Number(currentId) + 1).toString().padStart(4, '0')
-  incrementId = `${payload.year}${payload.code}${incrementId}`
-  return incrementId
+  let incrementId = (Number(currentId) + 1).toString().padStart(4, '0');
+  incrementId = `${payload.year}${payload.code}${incrementId}`;
+  return incrementId;
+};
+
+
+
+const lastFacultyId = async () => {
+  const lastFaculty = await FacultyModal.findOne(
+    {
+      role: 'faculty',
+    },
+    { id: 1, _id: -1 },
+    { sort: { createdAt: -1 } },
+  ).lean();
+
+  return lastFaculty?.id ? lastFaculty?.id : undefined;
+
+};
+
+
+export const generateFacultyId = async () => {
+  let currentId = (0).toString();
+
+  const lastFaculty = await lastFacultyId();
+
+  if(lastFaculty){
+    currentId = lastFaculty.substring(2);
+    console.log(currentId);
+  }
+
+  let incrementId = (Number(currentId) + 1).toString().padStart(4,'0')
+  incrementId = `F-${incrementId}`
+  return incrementId;
+
 }

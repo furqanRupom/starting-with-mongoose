@@ -12,4 +12,7 @@ const AcademicFacultySchema = new Schema({
 {timestamps:true})
 
 
+
+
+
 export const AcademicFacultyModel = model<IAcademicFaculty>('academicFaculty',AcademicFacultySchema)

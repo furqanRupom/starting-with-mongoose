@@ -96,14 +96,7 @@ const studentSchema = new Schema<IStudent, TStudentModel>(
         message: '{VALUE} is not valid a email',
       },
     },
-    contactNumber: {
-      type: String,
-      required: [true, 'contact number is required !'],
-    },
-    emergencyContactNo: {
-      type: String,
-      required: [true, 'emergency number is required !'],
-    },
+
     bloodGroup: {
       type: String,
       enum: ['A+', 'A-', 'AB+', 'AB-', 'B+', 'B-', 'O+', 'O-'],
@@ -112,6 +105,14 @@ const studentSchema = new Schema<IStudent, TStudentModel>(
     presentAddress: {
       type: String,
       required: [true, 'present address is required !'],
+    },
+    contactNumber: {
+      type: String,
+      required: [true, 'contact number is required !'],
+    },
+    emergencyContactNo: {
+      type: String,
+      required: [true, 'emergency number is required !'],
     },
     permanentAddress: {
       type: String,
@@ -132,7 +133,7 @@ const studentSchema = new Schema<IStudent, TStudentModel>(
     },
     academicDepartment: {
       type: Schema.Types.ObjectId,
-      ref:'academicDepartment'
+      ref: 'academicDepartment',
     },
     isDeleted: {
       type: Boolean,
@@ -144,7 +145,7 @@ const studentSchema = new Schema<IStudent, TStudentModel>(
       virtuals: true,
     },
   },
-)
+);
 
 /*  Mongoose Middleware and Hooks      */
 
@@ -167,7 +168,7 @@ studentSchema.pre('aggregate', function (next) {
 // Virtual
 
 studentSchema.virtual('fullName').get(function () {
-  return `${this.name.firstName} ${this.name.middleName} ${this.name.lastName}`
+  return `${this?.name?.firstName} ${this?.name?.middleName} ${this?.name?.lastName}`
 })
 
 /*
