@@ -34,6 +34,6 @@ export interface IAdmin {
   isDeleted: boolean;
 }
 
-export interface IAdminModal extends Model<IAdmin> {
-  isUserExits(id: string): Promise<IAdmin | null>;
-}
+// export interface IAdminModal extends Model<IAdmin> {
+//   isUserExits(id: string): Promise<IAdmin | null>;
+// }

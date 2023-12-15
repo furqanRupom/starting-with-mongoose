@@ -187,7 +187,7 @@ studentSchema.statics.isStudentsExits = async (id: string) => {
   return existingStudent
 }
 
-export const StudentModel = model<IStudent, TStudentModel>(
+export const StudentModel = model<IStudent>(
   'students',
   studentSchema,
 )

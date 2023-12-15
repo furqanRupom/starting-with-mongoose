@@ -14,7 +14,6 @@ import catchAsync from '../../utils/catchAsync'
 
 
 
-
 const getAllStudentsController = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const result = await StudentServices.getAllStudentsFromDB(req.query)
@@ -53,6 +52,7 @@ const deleteStudentController = catchAsync(
     })
   },
 )
+
 
 const updateStudentController = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {

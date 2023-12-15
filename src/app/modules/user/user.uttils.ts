@@ -1,5 +1,6 @@
 import { IAcademicSemester } from '../academicSemester/academicSemester.interface';
-import { FacultyModal } from '../faculty/faculty.model';
+import { AdminModel } from '../admin/admin.model';
+import { FacultyModel } from '../faculty/faculty.model';
 import { UserModel } from './user.model';
 
 const lastStudentId = async () => {
@@ -45,34 +46,64 @@ export const generateStudentId = async (payload: IAcademicSemester) => {
   return incrementId;
 };
 
-
-
 const lastFacultyId = async () => {
-  const lastFaculty = await FacultyModal.findOne(
+  const lastFaculty = await UserModel.findOne(
     {
       role: 'faculty',
     },
     { id: 1, _id: -1 },
     { sort: { createdAt: -1 } },
   ).lean();
+  console.log(lastFaculty);
 
-  return lastFaculty?.id ? lastFaculty?.id : undefined;
-
+  return lastFaculty?.id ? lastFaculty?.id.substring(2) : undefined;
 };
-
 
 export const generateFacultyId = async () => {
   let currentId = (0).toString();
 
   const lastFaculty = await lastFacultyId();
+  console.log({ lastFaculty });
 
-  if(lastFaculty){
+  if (lastFaculty) {
     currentId = lastFaculty.substring(2);
     console.log(currentId);
   }
 
-  let incrementId = (Number(currentId) + 1).toString().padStart(4,'0')
-  incrementId = `F-${incrementId}`
+  let incrementId = (Number(currentId) + 1).toString().padStart(4, '0');
+  incrementId = `F-${incrementId}`;
   return incrementId;
+};
 
-}
+const lastAdminId = async () => {
+  const lastAdmin = await UserModel.findOne(
+    {
+      role: 'admin',
+    },
+    {
+      id: 1,
+      _id: 0,
+    },
+    {
+      sort: { createdAt: -1 },
+    },
+  ).lean();
+
+  return lastAdmin?.id ? lastAdmin?.id.substring(2) : undefined ;
+};
+
+export const generateAdminId = async () => {
+    let currentId = (0).toString();
+
+    const lastAdmin = await lastAdminId();
+    console.log({ lastAdmin });
+
+    if (lastAdmin) {
+      currentId = lastAdmin.substring(2);
+      console.log(currentId);
+    }
+
+    let incrementId = (Number(currentId) + 1).toString().padStart(4, '0');
+    incrementId = `A-${incrementId}`;
+    return incrementId;
+};

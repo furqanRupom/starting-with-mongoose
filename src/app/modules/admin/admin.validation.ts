@@ -1,58 +1,56 @@
 import { z } from 'zod';
+import { BloodGroup, Gender } from './admin.constant';
 
-// Zod schema for FacultyName
-const AdminNameSchemaValidation = z.object({
-  firstName: z.string().min(1),
-  middleName: z.string().min(1),
-  lastName: z.string().min(1),
+const createUserNameValidationSchema = z.object({
+  firstName: z.string().min(1).max(20),
+  middleName: z.string().max(20),
+  lastName: z.string().max(20),
 });
 
-// Zod schema for Faculty
-const AdminSchemaValidation = z.object({
+export const createAdminValidationSchema = z.object({
   body: z.object({
+    password: z.string().max(20),
     admin: z.object({
-      name: AdminNameSchemaValidation,
-      gender: z.enum(['female', 'male', 'others']),
+      designation: z.string(),
+      name: createUserNameValidationSchema,
+      gender: z.enum([...Gender] as [string, ...string[]]),
       dateOfBirth: z.string().optional(),
       email: z.string().email(),
-      bloodGroup: z.enum(['A+', 'A-', 'AB+', 'AB-', 'B+', 'B-', 'O+', 'O-']),
-      contactNumber: z.string().optional(),
-      emergencyContactNo: z.string().optional(),
+      contactNo: z.string(),
+      emergencyContactNo: z.string(),
+      bloodGroup: z.enum([...BloodGroup] as [string, ...string[]]),
       presentAddress: z.string(),
       permanentAddress: z.string(),
-      isDeleted: z.boolean().default(false),
+      profileImg: z.string(),
     }),
   }),
 });
 
-const AdminNameSchemaUpDateValidation = z.object({
-  firstName: z.string().min(1).optional(),
-  middleName: z.string().min(1).optional(),
-  lastName: z.string().min(1).optional(),
+const updateUserNameValidationSchema = z.object({
+  firstName: z.string().min(3).max(20).optional(),
+  middleName: z.string().min(3).max(20).optional(),
+  lastName: z.string().min(3).max(20).optional(),
 });
 
-// Zod schema for Faculty
-const AdminSchemaUpdateValidation = z.object({
+export const updateAdminValidationSchema = z.object({
   body: z.object({
-    faculty: z.object({
-      id: z.string(),
-      name: AdminNameSchemaUpDateValidation,
-      gender: z.enum(['female', 'male', 'others']).optional(),
+    admin: z.object({
+      name: updateUserNameValidationSchema,
+      designation: z.string().max(30).optional(),
+      gender: z.enum([...Gender] as [string, ...string[]]).optional(),
       dateOfBirth: z.string().optional(),
       email: z.string().email().optional(),
-      bloodGroup: z
-      .enum(['A+', 'A-', 'AB+', 'AB-', 'B+', 'B-', 'O+', 'O-'])
-      .optional(),
-      contactNumber:z.string().optional(),
-      emergencyContactNo:z.string().optional(),
+      contactNo: z.string().optional(),
+      emergencyContactNo: z.string().optional(),
+      bloodGroup: z.enum([...BloodGroup] as [string, ...string[]]).optional(),
       presentAddress: z.string().optional(),
       permanentAddress: z.string().optional(),
-      isDeleted: z.boolean().default(false),
+      profileImg: z.string().optional(),
     }),
   }),
 });
 
-export const adminValidation = {
- AdminSchemaValidation,
-   AdminSchemaUpdateValidation,
+export const AdminValidations = {
+  createAdminValidationSchema,
+  updateAdminValidationSchema,
 };

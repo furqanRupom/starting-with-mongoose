@@ -7,6 +7,7 @@ import { UserModel } from '../user/user.model';
 import { IStudent } from './student.interface';
 import QueryBuilder from '../../builder/QueryBuilder';
 import { studentSearchableFields } from './student.constant';
+import { AdminModel } from '../admin/admin.model';
 
 // database works
 
@@ -27,6 +28,8 @@ const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
     .search(studentSearchableFields)
     .sort()
     .fields();
+
+
   const result = await studentQuery.modelQuery;
   return result;
 };
@@ -34,7 +37,7 @@ const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
 /* get a single student  */
 
 const getSingleStudentFromDB = async (id: string) => {
-  const result = await StudentModel.findOne({ id })
+  const result = await StudentModel.findById(id)
     .populate('admissionSemester')
     .populate({
       path: 'academicDepartment',
@@ -58,8 +61,8 @@ const deleteSingleStudentFromDB = async (id: string) => {
   try {
     session.startTransaction();
 
-    const deleteStudent = await StudentModel.findOneAndUpdate(
-      { id },
+    const deleteStudent = await StudentModel.findByIdAndUpdate(
+       id ,
       { isDeleted: true },
       { new: true, session },
     );
@@ -68,8 +71,10 @@ const deleteSingleStudentFromDB = async (id: string) => {
       throw new AppError(400, 'Failed to delete student');
     }
 
-    const deleteUser = await UserModel.findOneAndUpdate(
-      { id },
+    const userId = deleteStudent.user;
+
+    const deleteUser = await UserModel.findByIdAndUpdate(
+      userId ,
       { isDeleted: true },
       { new: true, session },
     );
@@ -133,8 +138,8 @@ const updateSingleStudentFromDB = async (
 
   */
 
-  const result = await StudentModel.findOneAndUpdate(
-    { id },
+  const result = await StudentModel.findByIdAndUpdate(
+     id ,
     modifiedUpdateData,
     { new: true, runValidators: true },
   );

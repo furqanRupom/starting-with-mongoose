@@ -17,25 +17,27 @@ export type TBloodGroup =
   | 'O-';
 
 export interface IFaculty {
-  id:string;
-  user:Types.ObjectId;
+  id: string;
+  user: Types.ObjectId;
   name: IFacultyName;
   email: string;
   password: string;
   gender: 'male' | 'female' | 'others';
   designation: string;
-  dateOfBirth:string;
-  bloodGroup:TBloodGroup;
-  presentAddress:string;
-  permanentAddress:string;
-  profileImage?:string;
-  academicDepartment:Types.ObjectId;
-  academicFaculty:Types.ObjectId;
-  isDeleted:boolean;
+  dateOfBirth: string;
+  bloodGroup: TBloodGroup;
+  presentAddress: string;
+  permanentAddress: string;
+  profileImg?: string;
+  contactNo: string;
+  emergencyContactNo:string;
+  academicDepartment: Types.ObjectId;
+  academicFaculty: Types.ObjectId;
+  isDeleted: boolean;
 }
 
 
-export interface IFacultyModal extends Model<IFaculty>{
- isUserExits(id:string):Promise<IFaculty|null>
-}
+// export interface IFacultyModal extends Model<IFaculty>{
+//  isUserExits(id:string):Promise<IFaculty|null>
+// }
 

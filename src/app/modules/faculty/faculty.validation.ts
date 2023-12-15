@@ -1,58 +1,63 @@
 import { z } from 'zod';
+import { BloodGroup, Gender } from './faculty.constant';
 
-// Zod schema for FacultyName
-const FacultyNameSchemaValidation = z.object({
-  firstName: z.string().min(1),
-  middleName: z.string().min(1),
-  lastName: z.string().min(1),
+const createUserNameValidationSchema = z.object({
+  firstName: z
+    .string()
+    .min(1)
+    .max(20)
+    .refine(value => /^[A-Z]/.test(value), {
+      message: 'First Name must start with a capital letter',
+    }),
+  middleName: z.string(),
+  lastName: z.string(),
 });
 
-// Zod schema for Faculty
-const FacultySchemaValidation = z.object({
+export const createFacultyValidationSchema = z.object({
   body: z.object({
     faculty: z.object({
-      name: FacultyNameSchemaValidation,
-      gender: z.enum(['female', 'male', 'others']),
+      designation: z.string(),
+      name: createUserNameValidationSchema,
+      gender: z.enum([...Gender] as [string, ...string[]]),
       dateOfBirth: z.string().optional(),
       email: z.string().email(),
-      bloodGroup: z.enum(['A+', 'A-', 'AB+', 'AB-', 'B+', 'B-', 'O+', 'O-']),
+      contactNo: z.string(),
+      emergencyContactNo: z.string(),
+      bloodGroup: z.enum([...BloodGroup] as [string, ...string[]]),
       presentAddress: z.string(),
       permanentAddress: z.string(),
-      academicDepartment: z.string(), // Assuming academicDepartment is a string ID
-      academicFaculty: z.string(), // Assuming academicFaculty is a string ID
-      isDeleted: z.boolean().default(false),
+      academicDepartment: z.string(),
+      profileImg: z.string(),
     }),
   }),
 });
 
-const FacultyNameSchemaUpDateValidation = z.object({
-  firstName: z.string().min(1).optional(),
-  middleName: z.string().min(1).optional(),
-  lastName: z.string().min(1).optional(),
+const updateUserNameValidationSchema = z.object({
+  firstName: z.string().min(1).max(20).optional(),
+  middleName: z.string().optional(),
+  lastName: z.string().optional(),
 });
 
-// Zod schema for Faculty
-const FacultySchemaUpdateValidation = z.object({
+export const updateFacultyValidationSchema = z.object({
   body: z.object({
     faculty: z.object({
-      id: z.string(),
-      name: FacultyNameSchemaUpDateValidation,
-      gender: z.enum(['female', 'male', 'others']).optional(),
+      designation: z.string().optional(),
+      name: updateUserNameValidationSchema,
+      gender: z.enum([...Gender] as [string, ...string[]]).optional(),
       dateOfBirth: z.string().optional(),
       email: z.string().email().optional(),
-      bloodGroup: z
-        .enum(['A+', 'A-', 'AB+', 'AB-', 'B+', 'B-', 'O+', 'O-'])
-        .optional(),
+      contactNo: z.string().optional(),
+      emergencyContactNo: z.string().optional(),
+      bloodGroup: z.enum([...BloodGroup] as [string, ...string[]]).optional(),
       presentAddress: z.string().optional(),
       permanentAddress: z.string().optional(),
-      academicDepartment: z.string().optional(), // Assuming academicDepartment is a string ID
-      academicFaculty: z.string().optional(), // Assuming academicFaculty is a string ID
-      isDeleted: z.boolean().default(false),
+      profileImg: z.string().optional(),
+      academicDepartment: z.string().optional(),
     }),
   }),
 });
 
-export const facultyValidation = {
-  FacultySchemaValidation,
-  FacultySchemaUpdateValidation,
+export const facultyValidations = {
+  createFacultyValidationSchema,
+  updateFacultyValidationSchema,
 };

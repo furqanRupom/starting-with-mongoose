@@ -1,6 +1,5 @@
-import { TBloodGroup } from "./admin.interface";
-
-export const AdminSearchableFields = [
+import { TBloodGroup} from './faculty.interface';
+export const FacultySearchableFields = [
   'name.firstName',
   'email',
   'presentAddress',
