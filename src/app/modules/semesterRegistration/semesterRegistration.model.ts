@@ -1,7 +1,7 @@
 import { Schema, model } from 'mongoose';
-import { iSemesterRegistration } from './semesterRegistration.interface';
+import { ISemesterRegistration } from './semesterRegistration.interface';
 
-const semesterRegistrationSchema = new Schema<iSemesterRegistration>(
+const semesterRegistrationSchema = new Schema<ISemesterRegistration>(
   {
     academicSemester: {
       type: Schema.Types.ObjectId,
@@ -37,7 +37,7 @@ const semesterRegistrationSchema = new Schema<iSemesterRegistration>(
   { timestamps: true },
 );
 
-export const SemesterRegistrationModel = model<iSemesterRegistration>(
+export const SemesterRegistrationModel = model<ISemesterRegistration>(
   'SemesterRegistration',
   semesterRegistrationSchema,
 );

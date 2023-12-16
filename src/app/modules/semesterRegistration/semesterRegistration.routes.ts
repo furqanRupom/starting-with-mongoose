@@ -27,3 +27,8 @@ router.patch(
 );
 
 router.get('/', semesterRegistrationController.getALlSemesterRegistration);
+
+
+
+
+export const semesterRegistrationRoutes = router
