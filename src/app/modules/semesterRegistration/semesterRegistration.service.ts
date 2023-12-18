@@ -4,6 +4,7 @@ import { ISemesterRegistration } from './semesterRegistration.interface';
 import { SemesterRegistrationModel } from './semesterRegistration.model';
 import { AcademicSemesterModel } from '../academicSemester/academicSemester.model';
 import QueryBuilder from '../../builder/QueryBuilder';
+import { semesterRegistrationStatus } from './semesterRegistration.constant';
 
 const createSemesterRegistrationIntoDB = async (
   payload: ISemesterRegistration,
@@ -52,9 +53,7 @@ const createSemesterRegistrationIntoDB = async (
   return result;
 };
 
-
 /* update semester registrations  */
-
 
 const updateSingleSemesterRegistrationFromDB = async (
   payload: ISemesterRegistration,
@@ -76,17 +75,47 @@ const updateSingleSemesterRegistrationFromDB = async (
 
   const requestedRegisteredSemesterStatus = isSemesterRegistrationExits.status;
 
-
   if (requestedRegisteredSemesterStatus === 'ENDED') {
     throw new AppError(
       httpStatus.BAD_REQUEST,
       'This registration has been closed that is why we cannot update this semester registration',
     );
   }
+
+  /* check if anyone wanna to change UPCOMING status to ENDED status directly  */
+
+  if (
+    requestedRegisteredSemesterStatus === semesterRegistrationStatus.UPCOMING &&
+    payload.status === semesterRegistrationStatus.ENDED
+  ) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      `You can not directly change this ${requestedRegisteredSemesterStatus} status to ${payload.status} status`,
+    );
+  }
+
+  /* check if anyone wanna to change ONGOING status to ENDED status directly  */
+
+  if (
+    requestedRegisteredSemesterStatus === semesterRegistrationStatus.ONGOING &&
+    payload.status === semesterRegistrationStatus.UPCOMING
+  ) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      `You can not directly change this ${requestedRegisteredSemesterStatus} status to ${payload.status} status`,
+    );
+  }
+
+  const result = await SemesterRegistrationModel.findByIdAndUpdate(
+    id,
+    payload,
+    {
+      runValidators: true,
+      new: true,
+    },
+  );
+  return result;
 };
-
-
-
 
 /* get single semester registrations */
 
@@ -95,7 +124,7 @@ const getSingleSemesterRegistrationFromDB = async (id: string) => {
   return result;
 };
 
-
+/* retrieve all semester registrations */
 
 const getAllSemesterRegistrationFromDB = async (
   query: Record<string, unknown>,
