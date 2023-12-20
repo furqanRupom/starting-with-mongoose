@@ -13,7 +13,15 @@ router.post(
   offeredCourseController.createOfferedCourse,
 );
 
+router.patch(
+  '/:id',
+  validateRequest(offeredCourseValidations.offeredCourseSchemaUpdateValidation),
+  offeredCourseController.updateOfferedCourse,
+);
 
 
+router.get('/',offeredCourseController.getAllOfferedCourse)
+router.get('/:id', offeredCourseController.singleOfferedCourse);
+router.delete('/:id',offeredCourseController.deleteOfferedCourse)
 
 export const offeredCourseRoutes = router;

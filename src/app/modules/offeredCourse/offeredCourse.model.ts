@@ -39,6 +39,10 @@ const offeredCourseSchema = new Schema<IOfferedCourse>(
       type: Number,
       required: true,
     },
+    maxCapacity:{
+      type:Number,
+      required:true
+    },
     days: [{
       type: String,
       enum: daysEnum,

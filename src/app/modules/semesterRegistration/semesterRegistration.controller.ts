@@ -29,9 +29,19 @@ const getALlSemesterRegistration = catchAsync(async (req, res) => {
   return result;
 });
 
+const deleteSemesterRegistration = catchAsync(async (req, res) => {
+  const {id} = req.params;
+  const result =
+    await semesterRegistrationServices.deleteSemesterRegistrationFromDB(
+      id
+    );
+  return result;
+});
+
 export const semesterRegistrationController = {
   createSemesterRegistration,
   getSingleSemesterRegistration,
   updateSingleSemesterRegistration,
   getALlSemesterRegistration,
+  deleteSemesterRegistration
 };

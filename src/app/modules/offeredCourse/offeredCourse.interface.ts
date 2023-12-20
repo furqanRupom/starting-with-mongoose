@@ -10,8 +10,15 @@ export interface IOfferedCourse {
   course:Types.ObjectId;
   faculty:Types.ObjectId;
   section:number;
+  maxCapacity:number;
   days:Days[];
   startTime:string;
   endTime:string
 
 }
+
+export interface ISchedules {
+  startTime: string;
+  endTime: string;
+  days: Days[];
+} 
