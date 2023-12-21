@@ -1,4 +1,6 @@
+import httpStatus from 'http-status';
 import catchAsync from '../../utils/catchAsync';
+import sendResponse from '../../utils/sendResponse';
 import { offeredCourseServices } from './offeredCourse.service';
 
 /* create offered course  */
@@ -7,7 +9,12 @@ const createOfferedCourse = catchAsync(async (req, res) => {
   const result = await offeredCourseServices.createOfferedCourseIntoDB(
     req.body,
   );
-  return result;
+   sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: 'create offered course successfully !',
+      data: result,
+    })
 });
 
 /* update offered course  */
@@ -18,7 +25,12 @@ const updateOfferedCourse = catchAsync(async (req, res) => {
     id,
     req.body,
   );
-  return result;
+   sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: 'Update offered course successfully !',
+      data: result,
+    })
 });
 
 /* update offered course  */
@@ -29,7 +41,12 @@ const singleOfferedCourse = catchAsync(async (req, res) => {
     id,
     req.body,
   );
-  return result;
+   sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: 'Retrieve single offered course successfully !',
+      data: result,
+    })
 });
 
 
@@ -39,12 +56,23 @@ const singleOfferedCourse = catchAsync(async (req, res) => {
 const deleteOfferedCourse = catchAsync(async(req,res)=> {
   const {id} = req.params;
   const result = await offeredCourseServices.deleteOfferedCourseFromDB(id);
-  return result;
+   sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: 'Delete offered course successfully !',
+      data: result,
+    })
 })
 
 
 const getAllOfferedCourse = catchAsync(async(req,res)=>{
-  const result = await offeredCourseServices.retrieveAllOfferedCoursesFromDB
+  const result = await offeredCourseServices.retrieveAllOfferedCoursesFromDB()
+   sendResponse(res, {
+     success: true,
+     statusCode: httpStatus.OK,
+     message: 'Retrieve all offered course successfully !',
+     data: result,
+   });
 })
 export const offeredCourseController = {
   createOfferedCourse,
