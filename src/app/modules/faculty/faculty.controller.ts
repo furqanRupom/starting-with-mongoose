@@ -9,6 +9,7 @@ import catchAsync from '../../utils/catchAsync';
 
 const getAllFaculties = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
+    console.log('get all faculties ',req.user)
     const result = await FacultyServices.getAllFacultiesFromDB(req.query)
     sendResponse(res, {
       statusCode: httpStatus.OK,
