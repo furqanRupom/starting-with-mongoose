@@ -4,7 +4,7 @@ import catchAsync from "../utils/catchAsync";
 import jwt from "jsonwebtoken";
 import config from "../config";
 const auth = () => {
-  catchAsync(async(req,res,next)=>{
+ return catchAsync(async(req,res,next)=>{
     const token  = req.headers.authorization;
 
 
