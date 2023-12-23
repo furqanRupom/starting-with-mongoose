@@ -42,7 +42,7 @@ const refreshToken = catchAsync(async(req,res)=>{
    sendResponse(res, {
      success: true,
      statusCode: httpStatus.OK,
-     message: 'Token Refresh Successfully !',
+     message: 'Access toke retrieve Successfully !',
      data: result,
    });
 })
