@@ -56,7 +56,7 @@ const adminSchema = new Schema<IAdmin>(
       required: [true, 'Email is required'],
       unique: true,
     },
-    contactNumber: { type: String, required: [true, 'Contact number is required'] },
+    contactNo: { type: String, required: [true, 'Contact number is required'] },
     emergencyContactNo: {
       type: String,
       required: [true, 'Emergency contact number is required'],
@@ -76,7 +76,7 @@ const adminSchema = new Schema<IAdmin>(
       type: String,
       required: [true, 'Permanent address is required'],
     },
-    profileImage: { type: String },
+    profileImg: { type: String },
     isDeleted: {
       type: Boolean,
       default: false,

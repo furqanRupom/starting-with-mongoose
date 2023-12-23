@@ -26,11 +26,11 @@ export interface IAdmin {
   designation: string;
   dateOfBirth: string;
   bloodGroup: TBloodGroup;
-  contactNumber: string;
+  contactNo: string;
   emergencyContactNo: string;
   presentAddress: string;
   permanentAddress: string;
-  profileImage?: string;
+  profileImg?: string;
   isDeleted: boolean;
 }
 

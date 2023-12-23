@@ -45,9 +45,37 @@ const refreshToken = catchAsync(async(req,res)=>{
      message: 'Access toke retrieve Successfully !',
      data: result,
    });
+});
+
+const forgetPassword = catchAsync(async(req,res)=>{
+
+  const {id} = req.body;
+  const result = await authServices.forgetPassword(id)
+
+   sendResponse(res, {
+     success: true,
+     statusCode: httpStatus.OK,
+     message: 'Reset Link is generated Successfully !',
+     data: result,
+   });
 })
+
+
+const resetPassword = catchAsync(async (req, res) => {
+  const token = req.headers.authorization as string
+  const result = await authServices.resetPassword(req.body,token);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: 'Reset password  Successfully !',
+    data: result,
+  });
+});
 export const authController = {
   loginUser,
   changePassword,
-  refreshToken
+  refreshToken,
+  forgetPassword,
+  resetPassword
 };

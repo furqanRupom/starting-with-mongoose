@@ -29,14 +29,14 @@ export interface IStudent {
   school: string
   email: string
   dateOFBirth?: Date
-  contactNumber: string
+  contactNo: string
   emergencyContactNo: string
   bloodGroup?: 'O+' | 'O-' | 'B+' | 'B-' | 'AB+' | 'AB-' | 'A+' | 'A-'
   presentAddress: string
   permanentAddress: string
   guardian: IGuardian
   localGuardian: ILocalGuardian
-  profileImage?: string,
+  profileImg?: string,
   admissionSemester:Types.ObjectId
   academicDepartment:Types.ObjectId
   isDeleted: boolean

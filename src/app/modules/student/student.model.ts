@@ -106,7 +106,7 @@ const studentSchema = new Schema<IStudent, TStudentModel>(
       type: String,
       required: [true, 'present address is required !'],
     },
-    contactNumber: {
+    contactNo: {
       type: String,
       required: [true, 'contact number is required !'],
     },
@@ -126,7 +126,7 @@ const studentSchema = new Schema<IStudent, TStudentModel>(
       type: localGuardianSchema,
       required: [true, 'local guardian details is required !'],
     },
-    profileImage: { type: String },
+    profileImg: { type: String },
     admissionSemester: {
       type: Schema.Types.ObjectId,
       ref: 'academicSemester',
