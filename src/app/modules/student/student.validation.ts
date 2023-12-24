@@ -103,6 +103,7 @@ const studentNameUpdateValidationSchema = z.object({
 
 const updateStudentValidationSchema = z.object({
   body: z.object({
+    password:z.string().optional(),
     student: z.object({
       name: studentNameUpdateValidationSchema.optional(),
       gender: z.enum(['female', 'male', 'others']).optional(),

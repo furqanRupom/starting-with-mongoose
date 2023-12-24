@@ -12,15 +12,16 @@ import {
 } from './user.uttils';
 import AppError from '../../errors/AppError';
 import httpStatus from 'http-status';
-import { IAcademicFaculty } from '../academicFaculty/academicFaculty.interface';
-import { AcademicFacultyModel } from '../academicFaculty/academicFaculty.model';
+
 import { AcademicDepartmentModel } from '../academicDepartment/academicDepartment.model';
 import { IFaculty } from '../faculty/faculty.interface';
 import { FacultyModel } from '../faculty/faculty.model';
 import { IAdmin } from '../admin/admin.interface';
 import { AdminModel } from '../admin/admin.model';
+import { JwtPayload } from 'jsonwebtoken';
+import { sendImageToCloudinary } from '../../utils/sendImageToCloudinary';
 
-const createStudentIntoDB = async (password: string, payload: IStudent) => {
+const createStudentIntoDB = async (file:any,password: string, payload: IStudent) => {
   const userData: Partial<IUser> = {};
 
   userData.password = password || (config.default_password as string);
@@ -41,7 +42,18 @@ const createStudentIntoDB = async (password: string, payload: IStudent) => {
       userData.id = await generateStudentId(admissionSemester);
     }
 
+
+    /* image hoisting to cloudinary  */
+    const imageName = `${userData?.id}${payload?.name?.firstName}`
+    const path = file?.path
+    const {secure_url}:any =  await sendImageToCloudinary(imageName,path);
+    console.log({secure_url});
+
+
+
+
     /* create user  => Transaction 1  */
+
 
     const result = await UserModel.create([userData], { session });
 
@@ -53,6 +65,7 @@ const createStudentIntoDB = async (password: string, payload: IStudent) => {
     }
     payload.id = result[0].id; // embedded id // => user id
     payload.user = result[0]._id; // reference id => user _id
+    payload.profileImg = secure_url;
 
     const newStudent = await StudentModel.create([payload], { session });
 
@@ -89,7 +102,6 @@ const createFacultyIntoDB = async (password: string, payload: IFaculty) => {
     userData.id = await generateFacultyId();
     userData.email = payload.email;
 
-
     const newUser = await UserModel.create([userData], { session });
 
     if (!newUser.length) {
@@ -111,13 +123,11 @@ const createFacultyIntoDB = async (password: string, payload: IFaculty) => {
   }
 };
 
-
-
 const createAdminIntoDB = async (password: string, payload: IAdmin) => {
   // create a user object
   const userData: Partial<IUser> = {};
 
-  console.log(payload)
+  console.log(payload);
 
   //if password is not given , use deafult password
   userData.password = password || (config.default_password as string);
@@ -125,7 +135,6 @@ const createAdminIntoDB = async (password: string, payload: IAdmin) => {
   //set student role
   userData.role = 'admin';
   userData.email = payload.email;
-
 
   const session = await mongoose.startSession();
 
@@ -163,9 +172,56 @@ const createAdminIntoDB = async (password: string, payload: IAdmin) => {
   }
 };
 
+const getMeFromDB = async (decoded: JwtPayload) => {
+  console.log(decoded);
+  const { role, userId } = decoded;
+
+  let result = {};
+
+  if (role === 'student') {
+    result = await StudentModel.find({ id: userId })
+      .populate('user')
+      .populate('admissionSemester')
+      .populate({
+        path: 'academicDepartment',
+        populate: {
+          path: 'academicFaculty',
+        },
+      });
+  }
+
+  if (role === 'faculty') {
+    result = await FacultyModel.find({ id: userId }).populate('user');
+  }
+
+  if (role === 'admin') {
+    result = await AdminModel.find({ id: userId }).populate('user');
+  }
+
+  return result;
+};
+
+const changeStatusFromDB = async (
+  id: string,
+  payload: {status:'in-progress' | 'blocked'},
+) => {
+  const result = await UserModel.findByIdAndUpdate(
+    id,
+    {
+      status: payload.status,
+    },
+    {
+      new: true,
+      runValidators: true,
+    },
+  );
+  return result;
+};
 
 export const userServices = {
   createStudentIntoDB,
   createFacultyIntoDB,
   createAdminIntoDB,
+  getMeFromDB,
+  changeStatusFromDB,
 };

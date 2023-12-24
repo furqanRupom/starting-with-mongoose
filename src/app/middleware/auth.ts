@@ -7,9 +7,9 @@ import { IUserType } from '../modules/user/user.interface';
 import { UserModel } from '../modules/user/user.model';
 
 /* define custom request interface for attaching new property in request  */
-interface customRequest extends Request {
-  user: JwtPayload;
-}
+// interface customRequest extends Request {
+//   user: JwtPayload;
+// }
 
 const auth = (...requiredRoles: IUserType[]) => {
   return catchAsync(async (req, res, next) => {
@@ -56,14 +56,33 @@ const auth = (...requiredRoles: IUserType[]) => {
            throw new AppError(httpStatus.BAD_REQUEST, 'The User is blocked !');
          }
 
-         if(user.passwordChangeAt && UserModel.isJwtIssuedBeforePasswordChanged(user.passwordChangeAt,iat as number)){
-          throw new AppError(httpStatus.UNAUTHORIZED, 'Access denied Invalid Authorization !');
-         }
+
+   
+
+
+
+     if (
+       user.passwordChangeAt && await
+       UserModel.isJwtIssuedBeforePasswordChanged(
+         user.passwordChangeAt,
+         iat as number,
+       )
+     ) {
+       throw new AppError(
+         httpStatus.UNAUTHORIZED,
+         'Access denied. Invalid Authorization!',
+       );
+     }
+
+
 
 
         //  const {userId:string,role} = decoded;
         //  console.log({userId,role});
 
+
+
+        /*  we created a user property in request object  for saving our decoded user information  */
         req.user = decoded as JwtPayload;
         next();
 

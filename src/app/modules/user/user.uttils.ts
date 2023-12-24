@@ -54,7 +54,6 @@ const lastFacultyId = async () => {
     { id: 1, _id: -1 },
     { sort: { createdAt: -1 } },
   ).lean();
-  console.log(lastFaculty);
 
   return lastFaculty?.id ? lastFaculty?.id.substring(2) : undefined;
 };
@@ -63,11 +62,9 @@ export const generateFacultyId = async () => {
   let currentId = (0).toString();
 
   const lastFaculty = await lastFacultyId();
-  console.log({ lastFaculty });
 
   if (lastFaculty) {
     currentId = lastFaculty.substring(2);
-    console.log(currentId);
   }
 
   let incrementId = (Number(currentId) + 1).toString().padStart(4, '0');
@@ -96,14 +93,16 @@ export const generateAdminId = async () => {
     let currentId = (0).toString();
 
     const lastAdmin = await lastAdminId();
-    console.log({ lastAdmin });
 
     if (lastAdmin) {
       currentId = lastAdmin.substring(2);
-      console.log(currentId);
     }
 
     let incrementId = (Number(currentId) + 1).toString().padStart(4, '0');
     incrementId = `A-${incrementId}`;
     return incrementId;
 };
+
+
+
+

@@ -46,6 +46,7 @@ const deleteFaculty = catchAsync(
   },
 );
 
+
 const updateFaculty = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;

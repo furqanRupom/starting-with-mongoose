@@ -10,7 +10,17 @@ const userSchemaValidation = z.object({
 
 
 
+const changeStatusSchemaValidation = z.object({
+  body: z.object({
+    status: z.enum(['in-progress', 'blocked'], {
+      required_error: 'choose one status !',
+    }),
+  }),
+});
+
 
 export const userValidation = {
   userSchemaValidation,
+  changeStatusSchemaValidation
+
 }
