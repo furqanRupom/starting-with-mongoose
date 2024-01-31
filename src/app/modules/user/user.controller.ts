@@ -11,7 +11,7 @@ import AppError from '../../errors/AppError'
 
 const createStudentController: RequestHandler = catchAsync(
   async (req, res) => {
-    console.log(req.file,'file');
+
     const { password, student: studentData } = req.body
     const result = await userServices.createStudentIntoDB(req.file,password, studentData)
     sendResponse(res, {
@@ -25,7 +25,7 @@ const createStudentController: RequestHandler = catchAsync(
 
 const createFaculty:RequestHandler = catchAsync(async(req,res)=>{
   const {password,faculty:facultyData} = req.body;
-  const result = await userServices.createFacultyIntoDB(password,facultyData);
+  const result = await userServices.createFacultyIntoDB(req.file,password,facultyData);
   sendResponse(res,{
     statusCode:httpStatus.OK,
     success:true,
@@ -37,7 +37,7 @@ const createFaculty:RequestHandler = catchAsync(async(req,res)=>{
 
 const createAdmin:RequestHandler = catchAsync(async(req,res)=>{
   const {password,admin:adminData} = req.body;
-  const result = await userServices.createAdminIntoDB(password,adminData);
+  const result = await userServices.createAdminIntoDB(req.file,password,adminData);
   sendResponse(res,{
     statusCode:httpStatus.OK,
     success:true,

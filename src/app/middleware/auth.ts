@@ -23,70 +23,67 @@ const auth = (...requiredRoles: IUserType[]) => {
     }
 
     /* validate access token  */
-    const decoded = jwt.verify(token, config.jwt_secret_token as string) as JwtPayload;
 
+    let decoded;
 
+    try {
+      decoded = jwt.verify(
+        token,
+        config.jwt_secret_token as string,
+      ) as JwtPayload;
+    } catch (error) {
 
-        const {role ,userId,iat} = decoded;
-        if (requiredRoles && !requiredRoles.includes(role)) {
-          throw new AppError(
-            httpStatus.UNAUTHORIZED,
-            'Access denied.Unauthorized authentication !',
-          );
-        }
+      throw new AppError(httpStatus.UNAUTHORIZED, 'token has been expired !');
+    }
 
-        // console.log(decoded);
+    const { role, userId, iat } = decoded;
+    if (requiredRoles && !requiredRoles.includes(role)) {
+      throw new AppError(
+        httpStatus.UNAUTHORIZED,
+        'Access denied.Unauthorized authentication !',
+      );
+    }
 
-         const user = await UserModel.isUsersExitsByCustomId(userId);
+    // console.log(decoded);
 
-         if (!user) {
-           throw new AppError(httpStatus.NOT_FOUND, 'The user is not found !');
-         }
-         /* check that user is delete or not  */
-         const isDeleted = user.isDeleted;
-         if (isDeleted) {
-           throw new AppError(httpStatus.BAD_REQUEST, 'User is deleted !');
-         }
+    const user = await UserModel.isUsersExitsByCustomId(userId);
 
-         /* if the user is blocked or not  */
+    if (!user) {
+      throw new AppError(httpStatus.NOT_FOUND, 'The user is not found !');
+    }
+    /* check that user is delete or not  */
+    const isDeleted = user.isDeleted;
+    if (isDeleted) {
+      throw new AppError(httpStatus.BAD_REQUEST, 'User is deleted !');
+    }
 
-         const isBlocked = user.status;
+    /* if the user is blocked or not  */
 
-         if (isBlocked === 'blocked') {
-           throw new AppError(httpStatus.BAD_REQUEST, 'The User is blocked !');
-         }
+    const isBlocked = user.status;
 
+    if (isBlocked === 'blocked') {
+      throw new AppError(httpStatus.BAD_REQUEST, 'The User is blocked !');
+    }
 
-   
+    if (
+      user.passwordChangeAt &&
+      (await UserModel.isJwtIssuedBeforePasswordChanged(
+        user.passwordChangeAt,
+        iat as number,
+      ))
+    ) {
+      throw new AppError(
+        httpStatus.UNAUTHORIZED,
+        'Access denied. Invalid Authorization!',
+      );
+    }
 
+    //  const {userId:string,role} = decoded;
+    //  console.log({userId,role});
 
-
-     if (
-       user.passwordChangeAt && await
-       UserModel.isJwtIssuedBeforePasswordChanged(
-         user.passwordChangeAt,
-         iat as number,
-       )
-     ) {
-       throw new AppError(
-         httpStatus.UNAUTHORIZED,
-         'Access denied. Invalid Authorization!',
-       );
-     }
-
-
-
-
-        //  const {userId:string,role} = decoded;
-        //  console.log({userId,role});
-
-
-
-        /*  we created a user property in request object  for saving our decoded user information  */
-        req.user = decoded as JwtPayload;
-        next();
-
-
+    /*  we created a user property in request object  for saving our decoded user information  */
+    req.user = decoded as JwtPayload;
+    next();
   });
 };
 

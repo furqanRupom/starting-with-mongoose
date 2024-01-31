@@ -21,7 +21,11 @@ import { AdminModel } from '../admin/admin.model';
 import { JwtPayload } from 'jsonwebtoken';
 import { sendImageToCloudinary } from '../../utils/sendImageToCloudinary';
 
-const createStudentIntoDB = async (file:any,password: string, payload: IStudent) => {
+const createStudentIntoDB = async (
+  file: any,
+  password: string,
+  payload: IStudent,
+) => {
   const userData: Partial<IUser> = {};
 
   userData.password = password || (config.default_password as string);
@@ -42,18 +46,13 @@ const createStudentIntoDB = async (file:any,password: string, payload: IStudent)
       userData.id = await generateStudentId(admissionSemester);
     }
 
-
     /* image hoisting to cloudinary  */
-    const imageName = `${userData?.id}${payload?.name?.firstName}`
-    const path = file?.path
-    const {secure_url}:any =  await sendImageToCloudinary(imageName,path);
-    console.log({secure_url});
-
-
-
+    const imageName = `${userData?.id}${payload?.name?.firstName}`;
+    const path = file?.path;
+    const { secure_url }: any = await sendImageToCloudinary(imageName, path);
+    console.log({ secure_url });
 
     /* create user  => Transaction 1  */
-
 
     const result = await UserModel.create([userData], { session });
 
@@ -84,7 +83,11 @@ const createStudentIntoDB = async (file:any,password: string, payload: IStudent)
   }
 };
 
-const createFacultyIntoDB = async (password: string, payload: IFaculty) => {
+const createFacultyIntoDB = async (
+  file: any,
+  password: string,
+  payload: IFaculty,
+) => {
   const userData: Partial<IUser> = {};
   userData.password = password ? '' : config?.default_password;
   userData.role = 'faculty';
@@ -110,6 +113,10 @@ const createFacultyIntoDB = async (password: string, payload: IFaculty) => {
 
     payload.id = newUser[0].id; // => user => generated id
     payload.user = newUser[0]._id; // => user _id  => default id
+    const imageName = `${userData?.id}${payload?.name?.firstName}`;
+    const path = file?.path;
+    const { secure_url }: any = await sendImageToCloudinary(imageName, path);
+    payload.profileImg = secure_url;
 
     const newFaculty = await FacultyModel.create([payload], { session });
 
@@ -123,7 +130,11 @@ const createFacultyIntoDB = async (password: string, payload: IFaculty) => {
   }
 };
 
-const createAdminIntoDB = async (password: string, payload: IAdmin) => {
+const createAdminIntoDB = async (
+  file: any,
+  password: string,
+  payload: IAdmin,
+) => {
   // create a user object
   const userData: Partial<IUser> = {};
 
@@ -150,10 +161,16 @@ const createAdminIntoDB = async (password: string, payload: IAdmin) => {
     if (!newUser.length) {
       throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create admin');
     }
+
     // set id , _id as user
     payload.id = newUser[0].id;
     payload.user = newUser[0]._id; //reference _id
 
+    /* image hoisting to cloudinary  */
+    const imageName = `${userData?.id}${payload?.name?.firstName}`;
+    const path = file?.path;
+    const { secure_url }: any = await sendImageToCloudinary(imageName, path);
+    payload.profileImg = secure_url;
     // create a admin (transaction-2)
     const newAdmin = await AdminModel.create([payload], { session });
 
@@ -203,7 +220,7 @@ const getMeFromDB = async (decoded: JwtPayload) => {
 
 const changeStatusFromDB = async (
   id: string,
-  payload: {status:'in-progress' | 'blocked'},
+  payload: { status: 'in-progress' | 'blocked' },
 ) => {
   const result = await UserModel.findByIdAndUpdate(
     id,

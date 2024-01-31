@@ -39,11 +39,15 @@ const changePassword = catchAsync (async (req,res) => {
 
 const refreshToken = catchAsync(async(req,res)=>{
   const token = req.cookies;
+  console.log(token);
+
   const result = await authServices.refreshToken(token);
+  console.log(result)
+
    sendResponse(res, {
      success: true,
      statusCode: httpStatus.OK,
-     message: 'Access toke retrieve Successfully !',
+     message: 'Access token retrieve Successfully !',
      data: result,
    });
 });
