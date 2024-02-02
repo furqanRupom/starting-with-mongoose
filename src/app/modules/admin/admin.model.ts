@@ -76,7 +76,7 @@ const adminSchema = new Schema<IAdmin>(
       type: String,
       required: [true, 'Permanent address is required'],
     },
-    profileImg: { type: String },
+    profileImg: { type: String, default: '', required: false },
     isDeleted: {
       type: Boolean,
       default: false,

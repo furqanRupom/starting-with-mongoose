@@ -46,11 +46,28 @@ const createStudentIntoDB = async (
       userData.id = await generateStudentId(admissionSemester);
     }
 
+    const academicDepartment = await AcademicDepartmentModel.findById(
+      payload.academicDepartment,
+    );
+
+    if (!academicDepartment) {
+      throw new AppError(
+        httpStatus.NOT_FOUND,
+        'academic department not found !',
+      );
+    }
+
+    /* added academic faculty  */
+    payload.academicFaculty = academicDepartment.academicFaculty;
+
     /* image hoisting to cloudinary  */
-    const imageName = `${userData?.id}${payload?.name?.firstName}`;
-    const path = file?.path;
-    const { secure_url }: any = await sendImageToCloudinary(imageName, path);
-    console.log({ secure_url });
+
+    if (file) {
+      const imageName = `${userData?.id}${payload?.name?.firstName}`;
+      const path = file?.path;
+      const { secure_url }: any = await sendImageToCloudinary(imageName, path);
+      payload.profileImg = secure_url;
+    }
 
     /* create user  => Transaction 1  */
 
@@ -64,7 +81,6 @@ const createStudentIntoDB = async (
     }
     payload.id = result[0].id; // embedded id // => user id
     payload.user = result[0]._id; // reference id => user _id
-    payload.profileImg = secure_url;
 
     const newStudent = await StudentModel.create([payload], { session });
 
@@ -82,6 +98,8 @@ const createStudentIntoDB = async (
     throw new Error(error as string);
   }
 };
+
+/* create faculty  */
 
 const createFacultyIntoDB = async (
   file: any,
@@ -113,10 +131,23 @@ const createFacultyIntoDB = async (
 
     payload.id = newUser[0].id; // => user => generated id
     payload.user = newUser[0]._id; // => user _id  => default id
-    const imageName = `${userData?.id}${payload?.name?.firstName}`;
-    const path = file?.path;
-    const { secure_url }: any = await sendImageToCloudinary(imageName, path);
-    payload.profileImg = secure_url;
+    if (file) {
+      const imageName = `${userData?.id}${payload?.name?.firstName}`;
+      const path = file?.path;
+      const { secure_url }: any = await sendImageToCloudinary(imageName, path);
+      payload.profileImg = secure_url;
+    }
+
+    /* check where  academic department is exit or not and add academic faculty by default   */
+    const academicDepartment = await AcademicDepartmentModel.findById(
+      payload.academicDepartment,
+    );
+
+    if (!academicDepartment) {
+         throw new AppError(httpStatus.NOT_FOUND,'Academic faculty does not exit')
+    }
+
+    payload.academicFaculty = academicDepartment.academicFaculty;
 
     const newFaculty = await FacultyModel.create([payload], { session });
 
@@ -124,11 +155,13 @@ const createFacultyIntoDB = async (
     await session.endSession();
     return newFaculty;
   } catch (error: any) {
-    await session.commitTransaction();
+    await session.abortTransaction();
     await session.endSession();
     throw new Error(error);
   }
 };
+
+/* create admin  */
 
 const createAdminIntoDB = async (
   file: any,
@@ -167,10 +200,13 @@ const createAdminIntoDB = async (
     payload.user = newUser[0]._id; //reference _id
 
     /* image hoisting to cloudinary  */
-    const imageName = `${userData?.id}${payload?.name?.firstName}`;
-    const path = file?.path;
-    const { secure_url }: any = await sendImageToCloudinary(imageName, path);
-    payload.profileImg = secure_url;
+    if (file) {
+      const imageName = `${userData?.id}${payload?.name?.firstName}`;
+      const path = file?.path;
+      const { secure_url }: any = await sendImageToCloudinary(imageName, path);
+      payload.profileImg = secure_url;
+    }
+
     // create a admin (transaction-2)
     const newAdmin = await AdminModel.create([payload], { session });
 

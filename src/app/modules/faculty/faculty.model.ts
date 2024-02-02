@@ -54,7 +54,6 @@ const facultySchema = new Schema<IFaculty>(
     email: {
       type: String,
       required: [true, 'Email is required'],
-      unique: true,
     },
     contactNo: { type: String, required: [true, 'Contact number is required'] },
     emergencyContactNo: {
@@ -76,11 +75,16 @@ const facultySchema = new Schema<IFaculty>(
       type: String,
       required: [true, 'Permanent address is required'],
     },
-    profileImg: { type: String },
+    profileImg: { type: String, default: '', required: false },
     academicDepartment: {
       type: Schema.Types.ObjectId,
       required: [true, 'academic department is required'],
       ref: 'academicDepartment',
+    },
+    academicFaculty: {
+      type: Schema.Types.ObjectId,
+      required:false,
+      ref: 'academicFaculty',
     },
     isDeleted: {
       type: Boolean,
@@ -94,16 +98,7 @@ const facultySchema = new Schema<IFaculty>(
   },
 );
 
-// generating full name
-// facultySchema.virtual('fullName').get(function () {
-//   return (
-//     this?.name?.firstName +
-//     '' +
-//     this?.name?.middleName +
-//     '' +
-//     this?.name?.lastName
-//   );
-// });
+
 
 // filter out deleted documents
 facultySchema.pre('find', function (next) {

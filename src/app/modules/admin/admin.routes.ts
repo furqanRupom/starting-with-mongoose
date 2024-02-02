@@ -11,14 +11,14 @@ const router = express.Router();
 // define routes
 
 
-router.get('/:id',auth('admin'), AdminControllers.getSingleAdmin);
-router.delete('/:id',auth('admin'), AdminControllers.deleteAdmin);
+router.get('/:id',auth('admin','superAdmin'), AdminControllers.getSingleAdmin);
+router.delete('/:id',auth('admin','superAdmin'), AdminControllers.deleteAdmin);
 router.patch(
   '/:id',
-  auth('admin'),
+  auth('admin','superAdmin'),
   validateRequest(AdminValidations.updateAdminValidationSchema),
 AdminControllers.updateAdmin,
 );
-router.get('/',auth('admin'), AdminControllers.getAllAdmins);
+router.get('/',auth('admin','superAdmin'), AdminControllers.getAllAdmins);
 
 export const adminRoutes = router;

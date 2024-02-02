@@ -38,7 +38,7 @@ const userSchema = new Schema<IUser, IUserModel>(
     role: {
       type: String,
       enum: {
-        values: ['student', 'admin', 'faculty'],
+        values: ['superAdmin', 'student', 'admin', 'faculty'],
       },
     },
     isDeleted: {
@@ -47,6 +47,7 @@ const userSchema = new Schema<IUser, IUserModel>(
       required: true,
     },
   },
+
   {
     timestamps: true,
   },
