@@ -54,7 +54,6 @@ const adminSchema = new Schema<IAdmin>(
     email: {
       type: String,
       required: [true, 'Email is required'],
-      unique: true,
     },
     contactNo: { type: String, required: [true, 'Contact number is required'] },
     emergencyContactNo: {

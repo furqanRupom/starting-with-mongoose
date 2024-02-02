@@ -95,6 +95,7 @@ const createStudentIntoDB = async (
     /* Rollback transaction  => if there is a any causes to create a user or student than the transaction will be the rollback   */
     await session.abortTransaction();
     await session.endSession();
+    console.log(error)
     throw new Error(error as string);
   }
 };
