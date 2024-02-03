@@ -25,8 +25,6 @@ const courseSchema = new Schema<ICourse>({
   },
   prefix:{
     type:String,
-    unique:true,
-    trim:true,
     required:true
   },
   credits:{
