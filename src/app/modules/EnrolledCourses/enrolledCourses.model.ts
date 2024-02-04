@@ -42,37 +42,37 @@ const enrolledCourseSchema = new Schema<IEnrolledCourses>({
   },
   academicSemester: {
     type: Schema.Types.ObjectId,
-    ref: 'AcademicSemester',
+    ref: 'academicSemester',
     required: true,
   },
   academicFaculty: {
     type: Schema.Types.ObjectId,
-    ref: 'AcademicFaculty',
+    ref: 'academicFaculty',
     required: true,
   },
   academicDepartment: {
     type: Schema.Types.ObjectId,
-    ref: 'AcademicDepartment',
+    ref: 'academicDepartment',
     required: true,
   },
   offeredCourse: {
     type: Schema.Types.ObjectId,
-    ref: 'OfferedCourse',
+    ref: 'offeredCourse',
     required: true,
   },
   course: {
     type: Schema.Types.ObjectId,
-    ref: 'Course',
+    ref: 'course',
     required: true,
   },
   student: {
     type: Schema.Types.ObjectId,
-    ref: 'Student',
+    ref: 'student',
     required: true,
   },
   faculty: {
     type: Schema.Types.ObjectId,
-    ref: 'Faculty',
+    ref: 'faculty',
     required: true,
   },
   isEnrolled: {

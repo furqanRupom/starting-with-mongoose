@@ -5,6 +5,26 @@ import sendResponse from "../../utils/sendResponse";
 
 
 
+
+
+/* retrieve all enrolled courses */
+
+const retrieveEnrolledCourses = catchAsync(async(req,res) => {
+   const userId = req.user.userId;
+   const result = await enrolledCoursesServices.retrieveMyEnrolledCoursesFromDB(userId,req.query)
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: 'retrieve my enrolled successfully !',
+      meta:result.meta,
+      data: result.result,
+    });
+})
+
+
+/* create enrolled course */
+
+
 const createEnrolledCourse = catchAsync(async(req,res)=>{
   const payload = req.body;
   const userId = req.user.userId;
@@ -18,6 +38,8 @@ const createEnrolledCourse = catchAsync(async(req,res)=>{
       data: result,
     });
 })
+
+
 
 const updateEnrolledCourseMarks = catchAsync(async (req, res) => {
   const facultyId = req.user.userId;
@@ -37,5 +59,6 @@ const updateEnrolledCourseMarks = catchAsync(async (req, res) => {
 
 export const enrolledCourseController = {
   createEnrolledCourse,
-  updateEnrolledCourseMarks
+  updateEnrolledCourseMarks,
+  retrieveEnrolledCourses
 }

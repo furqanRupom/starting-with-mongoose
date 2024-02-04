@@ -18,7 +18,7 @@ const createCourse = catchAsync(async(req,res)=> {
 })
 
 
-const getAllCourses = catchAsync(async(req,res)=> {
+const getAllCourses = catchAsync(async(req,res) => {
   const result = await courseServices.getAllCoursesFromDB(req.query);
 
    sendResponse(res, {
@@ -30,7 +30,7 @@ const getAllCourses = catchAsync(async(req,res)=> {
 })
 
 
-const getSingleCourse = catchAsync(async(req,res)=>{
+const getSingleCourse = catchAsync(async(req,res) => {
   const {id} = req.params;
 
   const result = await courseServices.getSingleCourseFromDB(id)
@@ -42,6 +42,7 @@ const getSingleCourse = catchAsync(async(req,res)=>{
     data: result,
   });
 })
+
 
 const  updateCourse = catchAsync(async (req, res) => {
   const { id } = req.params;
@@ -60,6 +61,7 @@ const  updateCourse = catchAsync(async (req, res) => {
 
 
 
+/* delete course  */
 
 const deleteCourse = catchAsync(async(req,res)=>{
   const { id } = req.params;
@@ -73,6 +75,8 @@ const deleteCourse = catchAsync(async(req,res)=>{
 })
 
 
+/* assign faculties into db */
+
 const assignFaculties = catchAsync(async (req, res) => {
   const { courseId } = req.params;
   const {faculties} = req.body;
@@ -80,11 +84,32 @@ const assignFaculties = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'crete course faculty successfully',
+    message: 'Create course faculty successfully',
     data: result,
   });
 });
 
+
+/* get and retrieve all assign faculties  */
+
+const getAssignFaculties = catchAsync(async (req, res) => {
+  const { courseId } = req.params;
+
+  const result = await courseServices.getAllAssignFacultiesFromDB(courseId)
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Get Course faculty successfully',
+    data: result,
+  });
+});
+
+
+
+
+
+
+/* delete course faculties  */
 
 const deleteCourseFaculties = catchAsync(async (req, res) => {
   const { id } = req.params;
@@ -111,6 +136,7 @@ export  const courseController = {
   updateCourse,
   deleteCourse,
   assignFaculties,
-  deleteCourseFaculties
+  deleteCourseFaculties,
+  getAssignFaculties
 
 }

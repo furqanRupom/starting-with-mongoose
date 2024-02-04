@@ -9,6 +9,7 @@ import { CourseModel } from '../course/course.model';
 import { SemesterRegistrationModel } from '../semesterRegistration/semesterRegistration.model';
 import { FacultyModel } from '../faculty/faculty.model';
 import { calculateGradeAndPoints } from './enrolledCourses.utils';
+import QueryBuilder from '../../builder/QueryBuilder';
 
 const createdEnrolledCoursesIntoDB = async (
   userId: string,
@@ -189,6 +190,34 @@ const createdEnrolledCoursesIntoDB = async (
 
 
 
+/* retrieve my enrolled courses */
+
+const retrieveMyEnrolledCoursesFromDB = async (userId:string,query:Record<string,unknown>) => {
+
+  /* get the student */
+
+  const  student = await StudentModel.findOne({id:userId});
+
+  if(!student){
+    throw new AppError(httpStatus.NOT_FOUND,'student not found')
+  }
+
+  const enrolledCourseQuery = new QueryBuilder(
+    EnrolledCoursesModel.find({ student: student._id }).populate(
+      'academicFaculty academicDepartment',
+    ),
+    query,
+  ).paginate().filter().sort();
+
+  const result = await enrolledCourseQuery.modelQuery;
+  const meta = await enrolledCourseQuery.countTotal();
+  return {
+    meta,
+    result
+  }; 
+
+}
+
 const updateEnrolledCourseMarksIntoDB = async (
   facultyId: string,
   payload: Partial<IEnrolledCourses>,
@@ -243,10 +272,10 @@ const updateEnrolledCourseMarksIntoDB = async (
       isCourseBelongToFaculty.courseMarks;
 
     const totalMarks =
-      Math.ceil(classTest1 * 0.1) +
-      Math.ceil(midTerm * 0.3) +
-      Math.ceil(classTest2 * 0.1) +
-      Math.ceil(finalTerm * 0.5);
+      Math.ceil(classTest1) +
+      Math.ceil(midTerm) +
+      Math.ceil(classTest2) +
+      Math.ceil(finalTerm)
 
     const result = calculateGradeAndPoints(totalMarks);
 
@@ -299,5 +328,6 @@ for (const [key, value] of Object.entries(myObject)) {
 
 export const enrolledCoursesServices = {
   createdEnrolledCoursesIntoDB,
-  updateEnrolledCourseMarksIntoDB
+  updateEnrolledCourseMarksIntoDB,
+  retrieveMyEnrolledCoursesFromDB
 };

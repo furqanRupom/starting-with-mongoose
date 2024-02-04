@@ -31,11 +31,15 @@ const loginUser = async (payload: ILoginUser) => {
   }
 
   /* check the password is matched or not  */
-
+ 
+  console.log(payload.password,user.password)
   const matchedPass = await UserModel.isPasswordMatched(
     payload.password,
     user.password,
   );
+
+  const isMatched = await bcrypt.compare(payload.password,user.password);
+  console.log(isMatched)
 
   if (!matchedPass) {
     throw new AppError(httpStatus.BAD_REQUEST, 'wrong password !');
@@ -211,10 +215,16 @@ const forgetPassword = async (id: string) => {
     config.jwt_secret_token_expire_date as string,
   );
   const resetPasswordLink = `${config.reset_pass_ui_link}?id=${user.id}&token=${resetToken}`;
-
+  const email = user.email
   sendEmail(user.email, resetPasswordLink);
-  console.log({ resetPasswordLink });
+  console.log({email, resetPasswordLink });
 };
+
+
+/* reset password */
+
+
+
 
 const resetPassword = async (
   payload: { id: string; newPassword: string },

@@ -108,7 +108,7 @@ const createFacultyIntoDB = async (
   payload: IFaculty,
 ) => {
   const userData: Partial<IUser> = {};
-  userData.password = password ? '' : config?.default_password;
+  userData.password = password || (config.default_password as string);
   userData.role = 'faculty';
   const academicDepartment = await AcademicDepartmentModel.findById(
     payload.academicDepartment,

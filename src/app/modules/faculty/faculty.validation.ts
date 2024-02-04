@@ -15,6 +15,7 @@ const createUserNameValidationSchema = z.object({
 
 export const createFacultyValidationSchema = z.object({
   body: z.object({
+    password:z.string(),
     faculty: z.object({
       designation: z.string(),
       name: createUserNameValidationSchema,
@@ -39,6 +40,7 @@ const updateUserNameValidationSchema = z.object({
 
 export const updateFacultyValidationSchema = z.object({
   body: z.object({
+    password:z.string(),
     faculty: z.object({
       designation: z.string().optional(),
       name: updateUserNameValidationSchema,
