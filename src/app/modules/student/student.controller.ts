@@ -16,13 +16,15 @@ import catchAsync from '../../utils/catchAsync'
 
 const getAllStudentsController = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
+    console.log(req.query);
     const result = await StudentServices.getAllStudentsFromDB(req.query)
 
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
       message: 'Students retrieve successfully',
-      data: result,
+      data: result.result,
+      meta:result.meta
     })
   },
 )

@@ -1,3 +1,4 @@
+import QueryBuilder from '../../builder/QueryBuilder'
 import AppError from '../../errors/AppError'
 import { semesterNameAndCodeMapper } from './academicSemester.constant'
 import { IAcademicSemester } from './academicSemester.interface'
@@ -16,9 +17,14 @@ const createAcademicSemesterIntoDB = async (payload: IAcademicSemester) => {
 
 /* Get all the academic semester   */
 
-const getAllAcademicSemestersFromDB = async () => {
-  const result = await AcademicSemesterModel.find()
-  return result
+const getAllAcademicSemestersFromDB = async (query:Record<string,unknown>) => {
+   const academicSemesterQuery = new QueryBuilder(AcademicSemesterModel.find(),query).paginate().filter().sort()
+   const result = await academicSemesterQuery.modelQuery;
+   const meta = await academicSemesterQuery.countTotal();
+   return {
+    result,
+    meta
+   }
 }
 
 /* Get specific academic semester  */

@@ -27,10 +27,13 @@ const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
   )
     .search(studentSearchableFields)
     .sort()
-    .fields();
+    .fields()
+    .paginate()
+  
 
 
   const result = await studentQuery.modelQuery;
+  console.log(result.length);
   const meta  = await studentQuery.countTotal()
   return {
     meta,

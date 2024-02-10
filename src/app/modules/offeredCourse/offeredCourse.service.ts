@@ -449,14 +449,14 @@ const getMyOfferedCourseFromDB = async (userId: string,query:any) => {
   const result = await OfferedCourseModel.aggregate([...aggregationQuery,...paginationQuery]);
    const  total =  (await OfferedCourseModel.aggregate(aggregationQuery)).length
     const totalPage = Math.ceil(page / limit);
-    
-  return {
-    meta: {
+    const offerMeta =  {
       page,
       limit,
       total,
       totalPage,
-    },
+    }
+  return {
+    meta:offerMeta,
     result
   };
 };

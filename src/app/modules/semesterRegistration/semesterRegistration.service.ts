@@ -140,8 +140,12 @@ const getAllSemesterRegistrationFromDB = async (
     .paginate();
 
   const result = await getAllSemester.modelQuery;
+  const meta = await getAllSemester.countTotal();
 
-  return result;
+  return {
+    result,
+    meta
+  };
 };
 
 

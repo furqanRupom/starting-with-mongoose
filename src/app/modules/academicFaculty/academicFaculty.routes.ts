@@ -9,12 +9,12 @@ const router = express.Router();
 
 router.post(
   '/create-academic-faculty',
-  auth(USER_ROLE.superAdmin),
+  auth(USER_ROLE.superAdmin,USER_ROLE.admin),
   validateRequest(academicFacultyValidation.academicFacultySchemaValidation),
   academicFacultyController.createAcademicFaculty,
 );
 
-router.get('/', academicFacultyController.getAllAcademicFaculties);
+router.get('/',auth(USER_ROLE.admin,USER_ROLE.superAdmin,USER_ROLE.student,USER_ROLE.faculty), academicFacultyController.getAllAcademicFaculties);
 
 router.patch(
   '/:id',
@@ -23,6 +23,6 @@ router.patch(
   ),
   academicFacultyController.updateAcademicFaculty,
 );
-router.get('/:id', academicFacultyController.getSpecificAcademicFaculties);
+router.get('/:id',auth(USER_ROLE.admin,USER_ROLE.superAdmin,USER_ROLE.student,USER_ROLE.faculty), academicFacultyController.getSpecificAcademicFaculties);
 
 export const academicFacultyRouter = router;

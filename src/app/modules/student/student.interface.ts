@@ -21,6 +21,7 @@ export interface ILocalGuardian {
 }
 
 export interface IStudent {
+
   id: string
   user:Types.ObjectId
   password: string
@@ -29,18 +30,22 @@ export interface IStudent {
   school: string
   email: string
   dateOFBirth?: Date
+  profileImg?: string,
+  bloodGroup?: 'O+' | 'O-' | 'B+' | 'B-' | 'AB+' | 'AB-' | 'A+' | 'A-'
+
   contactNo: string
   emergencyContactNo: string
-  bloodGroup?: 'O+' | 'O-' | 'B+' | 'B-' | 'AB+' | 'AB-' | 'A+' | 'A-'
   presentAddress: string
   permanentAddress: string
+
   guardian: IGuardian
   localGuardian: ILocalGuardian
-  profileImg?: string,
+
   admissionSemester:Types.ObjectId
   academicDepartment:Types.ObjectId
   academicFaculty:Types.ObjectId
   isDeleted: boolean
+  
 }
 
 // statics methods

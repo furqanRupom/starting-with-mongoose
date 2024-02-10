@@ -74,7 +74,8 @@ const getAllOfferedCourse = catchAsync(async(req,res)=>{
      success: true,
      statusCode: httpStatus.OK,
      message: 'Retrieve all offered course successfully !',
-     data: result,
+     meta: result?.meta,
+     data: result.result,
    });
 })
 
