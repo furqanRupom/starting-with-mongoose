@@ -132,7 +132,7 @@ const getAllSemesterRegistrationFromDB = async (
   query: Record<string, unknown>,
 ) => {
   const getAllSemester = new QueryBuilder(
-    SemesterRegistrationModel.find(),
+    SemesterRegistrationModel.find().populate('academicSemester'),
     query,
   )
     .filter()
