@@ -33,4 +33,9 @@ router.put(
   enrolledCourseController.updateEnrolledCourseMarks,
 );
 
+
+/* get all enrolled courses */
+
+router.get('/all-enrolled-courses',auth(USER_ROLE.faculty),enrolledCourseController.getAllEnrolledCourses)
+
 export const enrolledCourseRoutes = router;

@@ -261,18 +261,11 @@ const deleteOfferedCourseFromDB = async (id: string) => {
 
 /* get my offered course */
 
-
-
-
-const getMyOfferedCourseFromDB = async (userId: string,query:any) => {
-
-
+const getMyOfferedCourseFromDB = async (userId: string, query: any) => {
   /* pagination setup */
   const limit = Number(query.limit) || 10;
   const page = Number(query.page) || 1;
   const skip = (page - 1) * limit;
-
-
 
   /* is user or student exit */
 
@@ -287,6 +280,7 @@ const getMyOfferedCourseFromDB = async (userId: string,query:any) => {
   const getCurrentOngoingRegistrationSemester =
     await SemesterRegistrationModel.findOne({ status: 'ONGOING' });
 
+  console.log(getCurrentOngoingRegistrationSemester);
   if (!getCurrentOngoingRegistrationSemester) {
     throw new AppError(
       httpStatus.NOT_FOUND,
@@ -446,17 +440,21 @@ const getMyOfferedCourseFromDB = async (userId: string,query:any) => {
     },
   ];
 
-  const result = await OfferedCourseModel.aggregate([...aggregationQuery,...paginationQuery]);
-   const  total =  (await OfferedCourseModel.aggregate(aggregationQuery)).length
-    const totalPage = Math.ceil(page / limit);
-    const offerMeta =  {
+  const result = await OfferedCourseModel.aggregate([
+    ...aggregationQuery,
+    ...paginationQuery,
+  ]);
+
+  const total = (await OfferedCourseModel.aggregate(aggregationQuery)).length;
+  const totalPage = Math.ceil(page / limit);
+
+  return {
+    meta: {
       page,
       limit,
       total,
       totalPage,
-    }
-  return {
-    meta:offerMeta,
+    },
     result
   };
 };

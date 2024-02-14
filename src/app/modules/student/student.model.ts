@@ -191,6 +191,6 @@ studentSchema.statics.isStudentsExits = async (id: string) => {
 }
 
 export const StudentModel = model<IStudent>(
-  'students',
+  'student',
   studentSchema,
 )

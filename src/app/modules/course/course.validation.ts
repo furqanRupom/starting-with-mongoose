@@ -14,15 +14,13 @@ const createCourseValidationSchema = z.object({
   prerequisiteCourses: z.array(prerequisiteCoursesSchemaValidation).optional(),
 });
 
-
 const updateCourseValidationSchema = createCourseValidationSchema.partial();
 
 const courseFacultyValidation = z.object({
   body: z.object({
-    faculties: z.array(z.string()),
+    data: z.array(z.string()),
   }),
 });
-
 
 export const courseValidation = {
   createCourseValidationSchema,

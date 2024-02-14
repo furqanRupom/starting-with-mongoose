@@ -23,6 +23,7 @@ router.patch(
   ),
   academicFacultyController.updateAcademicFaculty,
 );
+
 router.get('/:id',auth(USER_ROLE.admin,USER_ROLE.superAdmin,USER_ROLE.student,USER_ROLE.faculty), academicFacultyController.getSpecificAcademicFaculties);
 
 export const academicFacultyRouter = router;

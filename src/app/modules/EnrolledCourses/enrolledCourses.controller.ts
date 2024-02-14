@@ -11,7 +11,10 @@ import sendResponse from "../../utils/sendResponse";
 
 const retrieveEnrolledCourses = catchAsync(async(req,res) => {
    const userId = req.user.userId;
+
    const result = await enrolledCoursesServices.retrieveMyEnrolledCoursesFromDB(userId,req.query)
+
+   console.log(result);
     sendResponse(res, {
       success: true,
       statusCode: httpStatus.OK,
@@ -57,8 +60,27 @@ const updateEnrolledCourseMarks = catchAsync(async (req, res) => {
 });
 
 
+const getAllEnrolledCourses = catchAsync(async (req, res) => {
+  const facultyId = req.user.userId;
+
+  const result = await enrolledCoursesServices.getAllEnrolledCoursesFromDB(
+    facultyId,
+    req.query,
+  );
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Enrolled courses are retrieved successfully',
+    meta: result.meta,
+    data: result.result,
+  });
+});
+
+
 export const enrolledCourseController = {
   createEnrolledCourse,
   updateEnrolledCourseMarks,
-  retrieveEnrolledCourses
+  retrieveEnrolledCourses,
+  getAllEnrolledCourses
 }

@@ -13,15 +13,19 @@ import { IFaculty } from './faculty.interface';
 /* get All Faculties  */
 
 const getAllFacultiesFromDB = async (query: Record<string, unknown>) => {
-  const studentQuery = new QueryBuilder(
+  const facultyQuery = new QueryBuilder(
     FacultyModel.find().populate('academicDepartment'),
     query,
   )
     .search(FacultySearchableFields)
     .sort()
     .fields();
-  const result = await studentQuery.modelQuery;
-  return result;
+  const result = await facultyQuery.modelQuery;
+  const meta = await facultyQuery.countTotal();
+  return {
+    result,
+    meta
+  };
 };
 
 /* get a single faculty  */

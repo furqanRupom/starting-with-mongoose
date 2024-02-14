@@ -35,6 +35,8 @@ router.post(
   validateRequest(facultyValidations.createFacultyValidationSchema),
   userController.createFaculty,
 );
+
+
 router.post(
   '/create-admin',
   auth(USER_ROLE.superAdmin),

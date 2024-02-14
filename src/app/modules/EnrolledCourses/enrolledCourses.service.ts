@@ -204,13 +204,14 @@ const retrieveMyEnrolledCoursesFromDB = async (userId:string,query:Record<string
 
   const enrolledCourseQuery = new QueryBuilder(
     EnrolledCoursesModel.find({ student: student._id }).populate(
-      'academicFaculty academicDepartment',
+      'academicFaculty academicDepartment course offeredCourse',
     ),
     query,
   ).paginate().filter().sort();
 
   const result = await enrolledCourseQuery.modelQuery;
   const meta = await enrolledCourseQuery.countTotal();
+  console.log(result)
   return {
     meta,
     result
@@ -326,8 +327,42 @@ for (const [key, value] of Object.entries(myObject)) {
   return result;
 };
 
+
+const getAllEnrolledCoursesFromDB = async (
+  facultyId: string,
+  query: Record<string, unknown>,
+) => {
+  const faculty = await FacultyModel.findOne({ id: facultyId });
+
+  if (!faculty) {
+    throw new AppError(httpStatus.NOT_FOUND, 'Faculty not found !');
+  }
+
+  const enrolledCourseQuery = new QueryBuilder(
+    EnrolledCoursesModel.find({
+      faculty: faculty._id,
+    }).populate(
+      'semesterRegistration academicSemester academicFaculty academicDepartment offeredCourse course student',
+    ),
+    query,
+  )
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
+
+  const result = await enrolledCourseQuery.modelQuery;
+  const meta = await enrolledCourseQuery.countTotal();
+
+  return {
+    meta,
+    result,
+  };
+};
+
 export const enrolledCoursesServices = {
   createdEnrolledCoursesIntoDB,
   updateEnrolledCourseMarksIntoDB,
-  retrieveMyEnrolledCoursesFromDB
+  retrieveMyEnrolledCoursesFromDB,
+  getAllEnrolledCoursesFromDB
 };

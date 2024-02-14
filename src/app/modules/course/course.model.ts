@@ -7,7 +7,7 @@ const preRequisiteCoursesSchema = new Schema<IPrerequisiteCourses> ({
   course:{
     type:Schema.Types.ObjectId,
     required:true,
-    ref:'Course'
+    ref:'course'
   },
   isDeleted:{
     type:Boolean,
@@ -48,12 +48,12 @@ const courseSchema = new Schema<ICourse>({
 
 
 
-export const CourseModel = model<ICourse>('Course',courseSchema)
+export const CourseModel = model<ICourse>('course',courseSchema)
 
 const courseFacultySchema = new Schema<ICourseFaculty>({
   course: {
     type: Schema.Types.ObjectId,
-    ref: 'Course',
+    ref: 'course',
     unique: true,
   },
   faculties: {

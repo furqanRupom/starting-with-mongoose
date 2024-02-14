@@ -73,6 +73,7 @@ const changePassword = async (
   userInfo: JwtPayload,
   payload: { oldPassword: string; newPassword: string },
 ) => {
+
   const user = await UserModel.isUsersExitsByCustomId(userInfo.userId);
 
   if (!user) {

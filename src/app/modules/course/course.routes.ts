@@ -66,6 +66,10 @@ router.get(
 router.put(
   '/:courseId/assign-faculties',
   auth('admin', 'superAdmin'),
+  (req,res,next) => {
+    console.log(req.body);
+    next()
+  },
   validateRequest(courseValidation.courseFacultyValidation),
   courseController.assignFaculties,
 );

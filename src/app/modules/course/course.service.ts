@@ -136,6 +136,7 @@ const assignFacultiesIntoDB = async (
   courseId: string,
   payload: Partial<ICourseFaculty>,
 ) => {
+  console.log(payload)
   const result = await CourseFacultyModel.findByIdAndUpdate(
     courseId,
     {
